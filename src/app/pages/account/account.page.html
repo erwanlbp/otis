@@ -5,5 +5,9 @@
 </ion-header>
 
 <ion-content>
+    <!--    <app-google-login *ngIf="!(firebaseAuth.authState|async)"></app-google-login>-->
 
+    <app-register-email-password *ngIf="!(firebaseAuth.authState|async)"></app-register-email-password>
+
+    <ion-button *ngIf="firebaseAuth.authState|async" (click)="logout()">Se déconnecter</ion-button>
 </ion-content>

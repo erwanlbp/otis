@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TabsPage } from './tabs.page';
 import { RouterModule, Routes } from '@angular/router';
+import { LoggedInGuard } from '../guards/logged-in.guard';
 
 const routes: Routes = [
     {
@@ -11,7 +12,7 @@ const routes: Routes = [
         component: TabsPage,
         children: [
             {path: '', redirectTo: '/tabs/home', pathMatch: 'full'},
-            {path: 'home', children: [{path: '', loadChildren: () => import('../pages/home/home.page.module').then(m => m.HomePageModule)}]},
+            {path: 'home', children: [{path: '', loadChildren: () => import('../pages/home/home.page.module').then(m => m.HomePageModule)}], canActivate: [LoggedInGuard]},
             {path: 'account', children: [{path: '', loadChildren: () => import('../pages/account/account.page.module').then(m => m.AccountPageModule)}]},
         ]
     },
