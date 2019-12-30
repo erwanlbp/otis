@@ -1,0 +1,28 @@
+<ion-card class="counter">
+    <ion-card-header>
+        <ion-card-title *ngIf="counter">{{counter.name}}</ion-card-title>
+        <ion-card-title *ngIf="!counter">--</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+        <ion-grid>
+            <ion-row>
+                <ion-col class="ion-text-center ion-align-items-center">
+                    <ion-button (click)="decrement()" [disabled]="!counter">
+                        <ion-icon name="remove"></ion-icon>
+                    </ion-button>
+                </ion-col>
+
+                <ion-col class="ion-text-center ion-align-self-center">
+                    <ion-label *ngIf="counter">{{counter.value}}</ion-label>
+                    <ion-label *ngIf="!counter">--</ion-label>
+                </ion-col>
+
+                <ion-col class="ion-text-center ion-align-items-center">
+                    <ion-button (click)="increment()" [disabled]="!counter">
+                        <ion-icon name="add"></ion-icon>
+                    </ion-button>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </ion-card-content>
+</ion-card>

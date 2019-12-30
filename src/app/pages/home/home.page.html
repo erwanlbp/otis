@@ -1,0 +1,15 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>Compteurs</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-grid>
+        <ion-row *ngIf="counters">
+            <ion-col>
+                <app-counter *ngFor="let counter of counters | async" [counter]="counter"></app-counter>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-content>
