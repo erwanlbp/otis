@@ -1,6 +1,8 @@
 {
   "name": "otis",
-  "integrations": {},
+  "integrations": {
+    "capacitor": {}
+  },
   "type": "angular",
   "id": "586d5619"
 }

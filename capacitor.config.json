@@ -1,0 +1,8 @@
+{
+  "appId": "com.erwanlbp.otis",
+  "appName": "otis",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "www",
+  "cordova": {}
+}
