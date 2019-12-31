@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Counter } from '../../interfaces/counter';
+import { CounterService } from '../../services/counter.service';
 
 @Component({
     selector: 'app-counter',
@@ -10,7 +11,9 @@ export class CounterComponent implements OnInit {
 
     @Input() counter: Counter;
 
-    constructor() {
+    constructor(
+        private counterService: CounterService,
+    ) {
     }
 
     ngOnInit() {
@@ -18,9 +21,11 @@ export class CounterComponent implements OnInit {
 
     decrement() {
         this.counter.value--;
+        this.counterService.saveCounter(this.counter);
     }
 
     increment() {
         this.counter.value++;
+        this.counterService.saveCounter(this.counter);
     }
 }

@@ -18,6 +18,6 @@ export class HomePage implements OnInit {
     }
 
     ngOnInit(): void {
-        this.counters = this.counterService.fetchCounters();
+        this.counters = this.counterService.fetchCounters$();
     }
 }
