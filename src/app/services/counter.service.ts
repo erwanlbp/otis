@@ -39,11 +39,16 @@ export class CounterService {
     }
 
     saveCounter(counter: Counter): Promise<void> {
-        return this.userCountersDocument$()
-            .pipe(
-                take(1),
-                switchMap(doc => doc.doc(counter.name).set(counter))
-            )
-            .toPromise();
+        return this.userCountersDocument$().pipe(
+            take(1),
+            switchMap(doc => doc.doc(counter.name).set(counter))
+        ).toPromise();
+    }
+
+    deleteCounter(counter: Counter): Promise<void> {
+        return this.userCountersDocument$().pipe(
+            take(1),
+            switchMap(doc => doc.doc(counter.name).delete())
+        ).toPromise();
     }
 }

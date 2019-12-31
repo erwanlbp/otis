@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Counter } from '../../interfaces/counter';
 import { CounterService } from '../../services/counter.service';
+import { UtilsService } from "../../services/utils.service";
 
 @Component({
     selector: 'app-counter',
@@ -13,6 +14,7 @@ export class CounterComponent implements OnInit {
 
     constructor(
         private counterService: CounterService,
+        private utilsService: UtilsService,
     ) {
     }
 
@@ -27,5 +29,15 @@ export class CounterComponent implements OnInit {
     increment() {
         this.counter.value++;
         this.counterService.saveCounter(this.counter);
+    }
+
+    async delete() {
+        this.utilsService.askForConfirmation()
+            .then(confirmed => {
+                if (!confirmed) {
+                    return;
+                }
+                this.counterService.deleteCounter(this.counter);
+            });
     }
 }

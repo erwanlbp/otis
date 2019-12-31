@@ -2,6 +2,9 @@
     <ion-card-header>
         <ion-card-title *ngIf="counter">{{counter.name}}</ion-card-title>
         <ion-card-title *ngIf="!counter">--</ion-card-title>
+        <ion-button (click)="delete()" class="counter-remove-button" color="dark" fill="clear" size="small" type="button">
+            <ion-icon name="trash"></ion-icon>
+        </ion-button>
     </ion-card-header>
     <ion-card-content>
         <ion-grid>
