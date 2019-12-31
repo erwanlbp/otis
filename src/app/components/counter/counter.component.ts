@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Counter } from '../../interfaces/counter';
 import { CounterService } from '../../services/counter.service';
-import { UtilsService } from "../../services/utils.service";
+import { UtilsService } from '../../services/utils.service';
 
 @Component({
     selector: 'app-counter',

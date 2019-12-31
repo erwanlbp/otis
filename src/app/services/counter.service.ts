@@ -51,4 +51,12 @@ export class CounterService {
             switchMap(doc => doc.doc(counter.name).delete())
         ).toPromise();
     }
+
+    getCounter$(name: string): Observable<Counter> {
+        return this.userCountersDocument$().pipe(
+            switchMap(doc => {
+                return doc.doc<Counter>(name).valueChanges();
+            })
+        );
+    }
 }

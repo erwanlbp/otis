@@ -9,6 +9,7 @@
         <ion-row *ngIf="counters">
             <ion-col>
                 <app-counter *ngFor="let counter of counters | async" [counter]="counter"></app-counter>
+                <app-add-counter></app-add-counter>
             </ion-col>
         </ion-row>
     </ion-grid>

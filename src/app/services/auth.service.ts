@@ -14,6 +14,6 @@ export class AuthService {
     }
 
     getUserId$(): Observable<string> {
-        return this.fireauth.authState.pipe(map(user => user.uid));
+        return this.fireauth.authState.pipe(map(user => user ? user.uid : null));
     }
 }
