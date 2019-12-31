@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AccountPage } from './account.page';
 import { RegisterEmailPasswordComponentModule } from './register-email-password/register-email-password.component.module';
+import { GoogleLoginComponentModule } from "./google-login/google-login.component.module";
 
 @NgModule({
     imports: [
@@ -13,7 +14,8 @@ import { RegisterEmailPasswordComponentModule } from './register-email-password/
         FormsModule,
         RouterModule.forChild([{path: '', component: AccountPage}]),
         // GoogleLoginComponentModule,
-        RegisterEmailPasswordComponentModule
+        RegisterEmailPasswordComponentModule,
+        GoogleLoginComponentModule
     ],
     declarations: [AccountPage]
 })

@@ -3,7 +3,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { LoadingController, Platform } from '@ionic/angular';
 import { GooglePlus } from '@ionic-native/google-plus/ngx';
 import { Router } from '@angular/router';
-import * as firebase from 'firebase';
+import * as firebase from 'firebase/app';
 import { firebaseWebClientId } from '../../../../environments/firebase.config';
 
 @Component({
@@ -34,7 +34,14 @@ export class GoogleLoginComponent implements OnInit {
         await loading.present();
     }
 
-    async login() {
+    login() {
+        if (this.platform.is('android') || this.platform.is('ios')) {
+            return this.mobileLogin();
+        }
+        return this.fireAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+    }
+
+    async mobileLogin() {
         let params;
         if (this.platform.is('android')) {
             params = {webClientId: firebaseWebClientId, offline: true};
