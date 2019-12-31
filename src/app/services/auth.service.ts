@@ -20,4 +20,8 @@ export class AuthService {
     getUserEmail$() {
         return this.fireauth.user.pipe(map(user => user ? user.email : null));
     }
+
+    logout() {
+        this.fireauth.auth.signOut();
+    }
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/auth';
 import { Observable } from 'rxjs';
-import { AuthService } from "../../services/auth.service";
+import { AuthService } from '../../services/auth.service';
+import { map } from 'rxjs/operators';
 
 @Component({
     selector: 'app-tab2',
@@ -11,21 +11,19 @@ import { AuthService } from "../../services/auth.service";
 export class AccountPage implements OnInit {
 
     email: Observable<string>;
+    isLoggedIn: Observable<boolean>;
 
     constructor(
-        private fireauth: AngularFireAuth,
-        private authService:AuthService,
+        private authService: AuthService,
     ) {
     }
 
     ngOnInit(): void {
         this.email = this.authService.getUserEmail$();
+        this.isLoggedIn = this.authService.getUserId$().pipe(map(userId => !!userId));
     }
 
     logout() {
-        this.fireauth.auth.signOut()
-            .catch(err => {
-                console.log(err);
-            });
+        this.authService.logout();
     }
 }

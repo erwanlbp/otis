@@ -7,7 +7,7 @@
 <ion-content>
     <!--    <app-google-login *ngIf="!(firebaseAuth.authState|async)"></app-google-login>-->
 
-    <app-register-email-password *ngIf="!(fireauth.authState|async)"></app-register-email-password>
+    <app-register-email-password *ngIf="!(isLoggedIn|async)"></app-register-email-password>
 
-    <ion-button *ngIf="fireauth.authState|async" (click)="logout()">Se déconnecter</ion-button>
+    <ion-button *ngIf="isLoggedIn|async" (click)="logout()">Se déconnecter</ion-button>
 </ion-content>

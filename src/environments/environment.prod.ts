@@ -1,6 +1,6 @@
-import { environment as devEnv } from './environment';
+import { firebaseConfig } from './firebase.config';
 
 export const environment = {
-    ...devEnv,
-    production: true
+    production: true,
+    firebaseConfig,
 };
