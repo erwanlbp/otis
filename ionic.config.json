@@ -1,7 +1,6 @@
 {
   "name": "otis",
   "integrations": {
-    "capacitor": {},
     "cordova": {}
   },
   "type": "angular",

@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.erwanlbp.otis" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Otis</name>
-    <description>Learn fast counting with Otis</description>
-    <author email="hi@ionicframework.com" href="http://ionicframework.com/">Erwan Le Batard--Polès</author>
+    <description>Keep track with Otis</description>
+    <author email="erwan.lbp@gmail.com" href="http://ionicframework.com/">Erwan Le Batard--Polès</author>
     <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
