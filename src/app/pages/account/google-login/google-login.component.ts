@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { LoadingController, Platform } from '@ionic/angular';
+import { Platform } from '@ionic/angular';
 import { GooglePlus } from '@ionic-native/google-plus/ngx';
 import { Router } from '@angular/router';
 import * as firebase from 'firebase/app';
 import { firebaseWebClientId } from '../../../../environments/firebase.config';
+import { AuthService } from '../../../services/auth.service';
+import { LoaderService } from '../../../services/loader.service';
+import { UtilsService } from '../../../services/utils.service';
 
 @Component({
     selector: 'app-google-login',
@@ -13,60 +16,56 @@ import { firebaseWebClientId } from '../../../../environments/firebase.config';
 })
 export class GoogleLoginComponent implements OnInit {
 
-    loading: any;
-
     constructor(
         private router: Router,
         private platform: Platform,
         private google: GooglePlus,
-        public loadingController: LoadingController,
-        private fireAuth: AngularFireAuth
+        private fireAuth: AngularFireAuth,
+        private authService: AuthService,
+        private loaderService: LoaderService,
+        private utilsService: UtilsService,
     ) {
     }
 
-    async ngOnInit() {
-        this.loading = await this.loadingController.create({
-            message: 'Connecting ...'
-        });
-    }
-
-    async presentLoading(loading) {
-        await loading.present();
+    ngOnInit() {
     }
 
     login() {
+        this.loaderService.showLoader('Connexion en cours ...');
+
+        let loginPromise: Promise<firebase.auth.UserCredential>;
         if (this.platform.is('android') || this.platform.is('ios')) {
-            return this.mobileLogin();
+            loginPromise = this.mobileLogin();
         }
-        return this.fireAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+        loginPromise = this.fireAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+        return loginPromise
+            .catch(err => {
+                console.log(err);
+                this.utilsService.showToast('Echec de la connexion Google')
+            })
+            .then(credentials => {
+                this.loaderService.dismissLoader();
+            });
     }
 
-    async mobileLogin() {
+    async mobileLogin(): Promise<firebase.auth.UserCredential> {
         let params;
         if (this.platform.is('android')) {
             params = {webClientId: firebaseWebClientId, offline: true};
         } else {
             params = {};
         }
-        this.google.login(params)
+        return this.google.login(params)
             .then((response) => {
-                console.log('resp:', response);
                 const {idToken, accessToken} = response;
-                this.onLoginSuccess(idToken, accessToken);
-            })
-            .catch((error) => {
-                console.log('error:', error);
+                return this.onLoginSuccess(idToken, accessToken);
             });
     }
 
-    onLoginSuccess(accessToken, accessSecret) {
+    onLoginSuccess(accessToken, accessSecret): Promise<firebase.auth.UserCredential> {
         const credential = accessSecret ?
             firebase.auth.GoogleAuthProvider.credential(accessToken, accessSecret)
             : firebase.auth.GoogleAuthProvider.credential(accessToken);
-        this.fireAuth.auth.signInWithCredential(credential)
-            .then((response) => {
-                this.router.navigate(['/tabs/home']);
-                this.loading.dismiss();
-            });
+        return this.fireAuth.auth.signInWithCredential(credential);
     }
 }
