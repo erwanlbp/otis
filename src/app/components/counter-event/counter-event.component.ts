@@ -30,4 +30,15 @@ export class CounterEventComponent implements OnInit {
                 this.eventService.deleteCounterEvent(this.event);
             });
     }
+
+    getIcon(): string {
+        switch (this.event.type) {
+            case 'increment':
+                return 'add';
+            case 'decrement':
+                return 'remove';
+            default:
+                return 'help';
+        }
+    }
 }

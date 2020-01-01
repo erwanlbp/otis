@@ -1,5 +1,10 @@
 <ion-item>
-    <ion-label>{{event.timestamp | date:'short'}} {{event.type}} ({{event.newValue}})</ion-label>
+    <ion-icon slot="start" [name]="getIcon()"></ion-icon>
+    <ion-label>
+        {{event.timestamp | date:'short'}}
+        <ion-icon name="arrow-forward" class="ion-margin-horizontal"></ion-icon>
+        <strong>{{event.newValue}}</strong>
+    </ion-label>
     <ion-button (click)="delete()" color="dark" fill="clear" slot="end" type="button">
         <ion-icon name="trash"></ion-icon>
     </ion-button>
