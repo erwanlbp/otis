@@ -30,6 +30,7 @@ export class CounterComponent implements OnInit {
     }
 
     decrement() {
+        this.loaderService.showLoader();
         this.counter.value--;
         this.counterService.saveCounter(this.counter)
             .then(() => this.saveEvent('decrement'))
