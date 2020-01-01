@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { Platform } from '@ionic/angular';
+import { NavController, Platform } from '@ionic/angular';
 import { GooglePlus } from '@ionic-native/google-plus/ngx';
-import { Router } from '@angular/router';
 import * as firebase from 'firebase/app';
 import { firebaseWebClientId } from '../../../../environments/firebase.config';
-import { AuthService } from '../../../services/auth.service';
 import { LoaderService } from '../../../services/loader.service';
 import { UtilsService } from '../../../services/utils.service';
 
@@ -17,11 +15,10 @@ import { UtilsService } from '../../../services/utils.service';
 export class GoogleLoginComponent implements OnInit {
 
     constructor(
-        private router: Router,
+        private navController: NavController,
         private platform: Platform,
         private google: GooglePlus,
         private fireAuth: AngularFireAuth,
-        private authService: AuthService,
         private loaderService: LoaderService,
         private utilsService: UtilsService,
     ) {
@@ -34,21 +31,23 @@ export class GoogleLoginComponent implements OnInit {
         this.loaderService.showLoader('Connexion en cours ...');
 
         let loginPromise: Promise<firebase.auth.UserCredential>;
-        if (this.platform.is('android') || this.platform.is('ios')) {
+        if (this.platform.is('cordova')) {
             loginPromise = this.mobileLogin();
+        } else {
+            loginPromise = this.webLogin();
         }
-        loginPromise = this.fireAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
         return loginPromise
             .catch(err => {
                 console.log(err);
-                this.utilsService.showToast('Echec de la connexion Google')
+                this.utilsService.showToast('Echec de la connexion Google');
             })
             .then(credentials => {
                 this.loaderService.dismissLoader();
+                this.navController.navigateRoot('/');
             });
     }
 
-    async mobileLogin(): Promise<firebase.auth.UserCredential> {
+    mobileLogin(): Promise<firebase.auth.UserCredential> {
         let params;
         if (this.platform.is('android')) {
             params = {webClientId: firebaseWebClientId, offline: true};
@@ -60,6 +59,10 @@ export class GoogleLoginComponent implements OnInit {
                 const {idToken, accessToken} = response;
                 return this.onLoginSuccess(idToken, accessToken);
             });
+    }
+
+    webLogin(): Promise<firebase.auth.UserCredential> {
+        return this.fireAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
     }
 
     onLoginSuccess(accessToken, accessSecret): Promise<firebase.auth.UserCredential> {

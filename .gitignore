@@ -33,3 +33,4 @@ src/environments/firebase.config.ts
 otis.keystore
 .firebase/
 .gradle/
+debug-signing.properties
