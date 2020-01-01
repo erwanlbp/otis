@@ -3,9 +3,9 @@ import { Counter } from '../../interfaces/counter';
 import { CounterService } from '../../services/counter.service';
 import { UtilsService } from '../../services/utils.service';
 import { EventService } from '../../services/event.service';
-import { LoaderService } from "../../services/loader.service";
-import { NavController, PopoverController } from "@ionic/angular";
-import { CounterMorePopoverComponent } from "../counter-more-popover/counter-more-popover.component";
+import { LoaderService } from '../../services/loader.service';
+import { NavController, PopoverController } from '@ionic/angular';
+import { CounterMorePopoverComponent } from '../counter-more-popover/counter-more-popover.component';
 
 @Component({
     selector: 'app-counter',
@@ -56,33 +56,11 @@ export class CounterComponent implements OnInit {
         });
     }
 
-    private async delete() {
-        this.utilsService.askForConfirmation()
-            .then(confirmed => {
-                if (!confirmed) {
-                    return;
-                }
-                this.counterService.deleteCounter(this.counter);
-            });
-    }
-
-    private async goToEvents() {
-        await this.navController.navigateForward(`/counter-events/${this.counter.name}`);
-    }
-
     async showMoreMenu(event) {
         const popover = await this.popoverController.create({
             component: CounterMorePopoverComponent,
             event,
-            componentProps: {popoverController: this.popoverController}
-        });
-        popover.onDidDismiss().then(({data, role}) => {
-            switch (data) {
-                case 'delete':
-                    return this.delete();
-                case 'events':
-                    return this.goToEvents();
-            }
+            componentProps: {counter: this.counter}
         });
         await popover.present();
     }

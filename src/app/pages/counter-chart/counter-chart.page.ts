@@ -6,11 +6,11 @@ import { ActivatedRoute } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
 
 @Component({
-    selector: 'app-counter-events',
-    templateUrl: './counter-events.page.html',
-    styleUrls: ['./counter-events.page.scss']
+    selector: 'app-counter-chart-page',
+    templateUrl: './counter-chart.page.html',
+    styleUrls: ['./counter-chart.page.scss'],
 })
-export class CounterEventsPage implements OnInit {
+export class CounterChartPage implements OnInit {
 
     counterEvents: Observable<CounterEvent[]>;
     counterName: string;
@@ -21,7 +21,7 @@ export class CounterEventsPage implements OnInit {
     ) {
     }
 
-    ngOnInit(): void {
+    ngOnInit() {
         this.counterEvents = this.activatedRoute.params.pipe(
             switchMap(params => {
                 this.counterName = params.counterName;

@@ -11,6 +11,7 @@ const routes: Routes = [
     {path: 'home', children: [{path: '', loadChildren: () => import('../../pages/home/home.page.module').then(m => m.HomePageModule)}], canActivate: [LoggedInGuard]},
     {path: 'account', children: [{path: '', loadChildren: () => import('../../pages/account/account.page.module').then(m => m.AccountPageModule)}]},
     {path: 'counter-events', children: [{path: '', loadChildren: () => import('../../pages/counter-events/counter-events.page.module').then(m => m.CounterEventsPageModule)}]},
+    {path: 'counter-chart', children: [{path: '', loadChildren: () => import('../../pages/counter-chart/counter-chart.page.module').then(m => m.CounterChartPageModule)}]},
 ];
 
 @NgModule({
