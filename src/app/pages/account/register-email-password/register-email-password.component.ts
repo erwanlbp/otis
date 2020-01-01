@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { NavController } from '@ionic/angular';
+import { RouteConstants } from '../../../constants/route.constants';
 
 @Component({
     selector: 'app-register-email-password',
@@ -29,7 +30,7 @@ export class RegisterEmailPasswordComponent implements OnInit {
         this.firebaseAuth.auth.createUserWithEmailAndPassword(this.form.controls.email.value, this.form.controls.password.value)
             .then(credentials => {
                 console.log(credentials);
-                this.navController.navigateRoot('/tabs/home');
+                this.navController.navigateRoot(RouteConstants.HOME);
             })
             .catch(err => {
                 console.log(err);
@@ -45,7 +46,7 @@ export class RegisterEmailPasswordComponent implements OnInit {
         this.firebaseAuth.auth.signInWithEmailAndPassword(this.form.controls.email.value, this.form.controls.password.value)
             .then(credentials => {
                 console.log(credentials);
-                this.navController.navigateRoot('/tabs/home');
+                this.navController.navigateRoot(RouteConstants.HOME);
             })
             .catch(err => {
                 console.log(err);

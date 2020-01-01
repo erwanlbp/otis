@@ -16,13 +16,13 @@ export class CounterService {
     ) {
     }
 
-    private userCountersDocument$(): Observable<AngularFirestoreCollection<Counter[]>> {
+    userCountersDocument$(): Observable<AngularFirestoreCollection<Counter>> {
         return this.authService.getUserId$().pipe(
             map(userId => {
                 if (!userId) {
                     return null;
                 }
-                return this.firestore.collection<Counter[]>(`users/${userId}/counters`);
+                return this.firestore.collection<Counter>(`users/${userId}/counters`);
             })
         );
     }
@@ -54,9 +54,7 @@ export class CounterService {
 
     getCounter$(name: string): Observable<Counter> {
         return this.userCountersDocument$().pipe(
-            switchMap(doc => {
-                return doc.doc<Counter>(name).valueChanges();
-            })
+            switchMap(doc => doc.doc<Counter>(name).valueChanges())
         );
     }
 }
