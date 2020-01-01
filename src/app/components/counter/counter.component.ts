@@ -4,6 +4,8 @@ import { CounterService } from '../../services/counter.service';
 import { UtilsService } from '../../services/utils.service';
 import { EventService } from '../../services/event.service';
 import { LoaderService } from "../../services/loader.service";
+import { NavController, PopoverController } from "@ionic/angular";
+import { CounterMorePopoverComponent } from "../counter-more-popover/counter-more-popover.component";
 
 @Component({
     selector: 'app-counter',
@@ -15,10 +17,12 @@ export class CounterComponent implements OnInit {
     @Input() counter: Counter;
 
     constructor(
+        private navController: NavController,
         private counterService: CounterService,
         private eventService: EventService,
         private utilsService: UtilsService,
         private loaderService: LoaderService,
+        private popoverController: PopoverController,
     ) {
     }
 
@@ -51,7 +55,7 @@ export class CounterComponent implements OnInit {
         });
     }
 
-    async delete() {
+    private async delete() {
         this.utilsService.askForConfirmation()
             .then(confirmed => {
                 if (!confirmed) {
@@ -59,5 +63,26 @@ export class CounterComponent implements OnInit {
                 }
                 this.counterService.deleteCounter(this.counter);
             });
+    }
+
+    private async goToEvents() {
+        await this.navController.navigateForward(`/counter-events/${this.counter.name}`);
+    }
+
+    async showMoreMenu(event) {
+        const popover = await this.popoverController.create({
+            component: CounterMorePopoverComponent,
+            event,
+            componentProps: {popoverController: this.popoverController}
+        });
+        popover.onDidDismiss().then(({data, role}) => {
+            switch (data) {
+                case 'delete':
+                    return this.delete();
+                case 'events':
+                    return this.goToEvents();
+            }
+        });
+        await popover.present();
     }
 }

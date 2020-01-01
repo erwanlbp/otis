@@ -12,7 +12,6 @@ import { CounterEventComponentModule } from '../../components/counter-event/coun
         CommonModule,
         FormsModule,
         RouterModule.forChild([
-            {path: '', component: CounterEventsPage},
             {path: ':counterName', component: CounterEventsPage},
         ]),
         CounterEventComponentModule,

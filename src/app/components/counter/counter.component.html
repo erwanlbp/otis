@@ -2,8 +2,8 @@
     <ion-card-header>
         <ion-card-subtitle *ngIf="counter">{{counter.name}}</ion-card-subtitle>
         <ion-card-subtitle *ngIf="!counter">--</ion-card-subtitle>
-        <ion-button (click)="delete()" class="counter-remove-button" color="dark" fill="clear" size="small" type="button">
-            <ion-icon name="trash"></ion-icon>
+        <ion-button (click)="showMoreMenu($event)" class="counter-more-button" color="dark" fill="clear" size="small" type="button">
+            <ion-icon name="more"></ion-icon>
         </ion-button>
     </ion-card-header>
     <ion-card-content>

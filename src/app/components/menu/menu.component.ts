@@ -18,11 +18,6 @@ export class MenuComponent {
             title: 'Profile',
             url: RouteConstants.ACCOUNT,
             icon: 'person'
-        },
-        {
-            title: 'Evénements',
-            url: RouteConstants.COUNTER_EVENTS,
-            icon: 'analytics'
         }
     ];
 
