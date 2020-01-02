@@ -29,7 +29,7 @@ export class AddCounterComponent implements OnInit {
                 if (!counter) {
                     return;
                 }
-                return this.counterService.getCounter$(counter.name).pipe(take(1)).toPromise()
+                return this.counterService.fetchCounter$(counter.name).pipe(take(1)).toPromise()
                     .then(existingCounter => {
                         if (existingCounter) {
                             this.utilsService.showToast('Ce compteur existe déjà avec la valeur ' + existingCounter.value);

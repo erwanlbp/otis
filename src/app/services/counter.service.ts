@@ -52,7 +52,7 @@ export class CounterService {
         ).toPromise();
     }
 
-    getCounter$(name: string): Observable<Counter> {
+    fetchCounter$(name: string): Observable<Counter> {
         return this.userCountersDocument$().pipe(
             switchMap(doc => doc.doc<Counter>(name).valueChanges())
         );

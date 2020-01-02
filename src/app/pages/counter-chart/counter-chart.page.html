@@ -3,11 +3,12 @@
         <ion-buttons slot="start">
             <ion-menu-button *ngIf="!backButton"></ion-menu-button>
         </ion-buttons>
-        <ion-title>Graphique du compteur {{counterName}}</ion-title>
+        <ion-title>Graphique du compteur {{(counterName|async)?.name}}</ion-title>
         <ion-back-button #backButton slot="start"></ion-back-button>
     </ion-toolbar>
 </ion-header>
 
 <ion-content>
-    <app-counter-chart *ngIf="counterEvents" [events]="counterEvents"></app-counter-chart>
+    <app-counter-chart *ngIf="counter$ && counterEvents$" [counter]="counter$" [events]="counterEvents$">
+    </app-counter-chart>
 </ion-content>

@@ -1,68 +1,100 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import * as Highcharts from 'highcharts';
 import { CounterEvent } from "../../interfaces/counter-event.interface";
-
-declare var require: any;
-let Boost = require('highcharts/modules/boost');
-let noData = require('highcharts/modules/no-data-to-display');
-let More = require('highcharts/highcharts-more');
+import { Observable, Subject } from 'rxjs';
+import { takeUntil, count } from 'rxjs/operators';
+import { Counter } from 'src/app/interfaces/counter';
+import HC_exporting from 'highcharts/modules/exporting';
+import Boost from 'highcharts/modules/boost';
+import noData from 'highcharts/modules/no-data-to-display';
+import More from 'highcharts/highcharts-more';
+import HC_export_data from 'highcharts/modules/export-data';
+import { Platform } from '@ionic/angular';
 
 Boost(Highcharts);
 noData(Highcharts);
 More(Highcharts);
-noData(Highcharts);
+HC_exporting(Highcharts);
+HC_export_data(Highcharts);
 
 @Component({
     selector: 'app-counter-chart',
     templateUrl: './counter-chart.component.html',
     styleUrls: ['./counter-chart.component.scss'],
 })
-export class CounterChartComponent implements OnInit {
+export class CounterChartComponent implements OnInit, OnDestroy {
 
-    @Input() events: CounterEvent[];
+    private destroyed$: Subject<void> = new Subject<void>();
+
+    @Input() events: Observable<CounterEvent[]>;
+    @Input() counter: Observable<Counter>;
 
     public options: any = {
         chart: {
-            type: 'scatter',
-            height: 700
+            type: 'line',
+            zoomType: 'x',
         },
         title: {
-            text: 'Sample Scatter Plot'
+            text: 'Inconnu'
         },
         credits: {
             enabled: false
         },
         tooltip: {
-            formatter: (pt) => {
-                return 'x: ' + Highcharts.dateFormat('%e %b %y %H:%M:%S', pt.now.x) + 'y: ' + pt.now.y.toFixed(2);
+            formatter: function () {
+                return Highcharts.dateFormat('%e %b %y %H:%M:%S', this.x);
             }
         },
         xAxis: {
             type: 'datetime',
-            labels: {
-                formatter: (value) => {
-                    return Highcharts.dateFormat('%e %b %y', value);
-                }
-            }
+
         },
-        series: [
-            {
-                name: 'Normal',
-                turboThreshold: 500000,
-                data: [[new Date('2018-01-25 18:38:31').getTime(), 2]]
+        yAxis: {
+            title: {
+                text: 'Valeur du compteur'
             },
-            {
-                name: 'Abnormal',
-                turboThreshold: 500000,
-                data: [[new Date('2018-02-05 18:38:31').getTime(), 7]]
-            }
-        ]
+        },
+        series: [],
     };
 
-    constructor() {
+    constructor(
+        private platform: Platform,
+    ) {
     }
 
     ngOnInit() {
-        Highcharts.chart('container', this.options);
+        this.setExportOptions(this.options);
+        this.counter.pipe(takeUntil(this.destroyed$)).subscribe(counter => {
+            this.options.title.text = counter.name;
+        });
+        this.events.pipe(takeUntil(this.destroyed$)).subscribe(events => {
+            this.options.series = [{
+                name: 'Evénements',
+                data: events.map(event => [event.timestamp, event.newValue]),
+            }];
+            Highcharts.chart('container', this.options);
+        });
+    }
+
+    private setExportOptions(options) {
+        if (this.platform.is('cordova')) {
+            options.exporting = { enabled: false };
+        } else {
+            options.exporting = {
+                buttons: {
+                    contextButton: {
+                        menuItems: [
+                            'downloadPNG',
+                            'downloadCSV',
+                        ]
+                    }
+                }
+            };
+        }
+    }
+
+    ngOnDestroy() {
+        this.destroyed$.next();
+        this.destroyed$.unsubscribe();
     }
 }

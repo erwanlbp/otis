@@ -13,7 +13,7 @@ import { CounterChartComponentModule } from '../../components/counter-chart/coun
         FormsModule,
         IonicModule,
         RouterModule.forChild([
-            {path: ':counterName', component: CounterChartComponent},
+            {path: ':counterName', component: CounterChartPage},
         ]),
         CounterChartComponentModule,
     ],

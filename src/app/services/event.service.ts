@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
-import { map, switchMap, take } from 'rxjs/operators';
+import { map, switchMap, take, tap } from 'rxjs/operators';
 import { AuthService } from './auth.service';
 import { CounterEvent, toCounterEvent, toCounterEventDto } from '../interfaces/counter-event.interface';
 import { CounterService } from './counter.service';
@@ -42,7 +42,7 @@ export class EventService {
     fetchCounterEvents$(counterName: string): Observable<CounterEvent[]> {
         return this.userCounterEventsDocument$(counterName).pipe(
             switchMap(doc => doc.valueChanges()),
-            map(events => !events ? [] : events.map(event => toCounterEvent(event, counterName)))
+            map(events => !events ? [] : events.map(event => toCounterEvent(event, counterName))),
         );
     }
 }
