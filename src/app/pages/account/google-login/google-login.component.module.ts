@@ -10,7 +10,6 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
         IonicModule,
         CommonModule,
         FormsModule,
-        AngularFireAuthModule,
     ],
     exports: [GoogleLoginComponent],
     declarations: [GoogleLoginComponent],

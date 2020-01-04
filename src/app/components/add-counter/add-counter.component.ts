@@ -2,8 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { CounterService } from '../../services/counter.service';
 import { Counter } from '../../interfaces/counter';
 import { AlertController } from '@ionic/angular';
-import { UtilsService } from "../../services/utils.service";
-import { take } from "rxjs/operators";
+import { UtilsService } from '../../services/utils.service';
+import { take } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { AuthService } from 'src/app/services/auth.service';
+import { auth } from 'firebase';
 
 @Component({
     selector: 'app-add-counter',
@@ -12,14 +15,18 @@ import { take } from "rxjs/operators";
 })
 export class AddCounterComponent implements OnInit {
 
+    connected$: Observable<boolean>;
+
     constructor(
         private counterService: CounterService,
         private alertController: AlertController,
         private utilsService: UtilsService,
+        private authService: AuthService,
     ) {
     }
 
     ngOnInit() {
+        this.connected$ = this.authService.isConnected$();
     }
 
 
@@ -67,7 +74,7 @@ export class AddCounterComponent implements OnInit {
                     },
                     {
                         text: 'Confirmer',
-                        handler: (data) => resolve({name: data.name, value: Number(data.value)})
+                        handler: (data) => resolve({ name: data.name, value: Number(data.value) })
                     }
                 ]
             }).then(alert => alert.present());
