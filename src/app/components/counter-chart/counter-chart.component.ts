@@ -53,6 +53,7 @@ export class CounterChartComponent implements OnInit, OnDestroy {
             title: {
                 text: 'Valeur du compteur'
             },
+            allowDecimals: false,
         },
         series: [],
     };
