@@ -9,6 +9,6 @@
 </ion-header>
 
 <ion-content>
-    <app-counter-chart *ngIf="counter$ && counterEvents$" [counter]="counter$" [events]="counterEvents$">
-    </app-counter-chart>
+    <app-counter-chart *ngIf="counter$ && counterEvents$" [counter]="counter$" [events]="counterEvents$"></app-counter-chart>
+    <app-counter-bar-chart *ngIf="counter$ && counterEventsDayAggregated$" [counter]="counter$" [events]="counterEventsDayAggregated$" aggregateName="jour de la semaine"></app-counter-bar-chart>
 </ion-content>

@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import * as Highcharts from 'highcharts';
-import { CounterEvent } from "../../interfaces/counter-event.interface";
+import { CounterEvent } from '../../interfaces/counter-event.interface';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil, count } from 'rxjs/operators';
 import { Counter } from 'src/app/interfaces/counter';
@@ -24,6 +24,7 @@ HC_export_data(Highcharts);
 })
 export class CounterChartComponent implements OnInit, OnDestroy {
 
+    randomId: string = Math.random().toString(36).substring(2, 15);
     private destroyed$: Subject<void> = new Subject<void>();
 
     @Input() events: Observable<CounterEvent[]>;
@@ -73,7 +74,7 @@ export class CounterChartComponent implements OnInit, OnDestroy {
                 name: 'Evénements',
                 data: events.map(event => [event.timestamp, event.newValue]),
             }];
-            Highcharts.chart('container', this.options);
+            Highcharts.chart(this.randomId, this.options);
         });
     }
 

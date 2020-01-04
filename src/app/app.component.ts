@@ -5,8 +5,8 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { RouteConstants } from './constants/route.constants';
 import { AuthService } from './services/auth.service';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import * as jsonPackage from './../../package.json';
+import * as moment from 'moment';
 
 @Component({
     selector: 'app-root',
@@ -36,6 +36,7 @@ export class AppComponent implements OnInit {
     }
 
     initializeApp() {
+        moment.locale('fr-FR');
         this.platform.ready().then(() => {
             this.statusBar.styleDefault();
             this.splashScreen.hide();

@@ -1,15 +1,15 @@
 import { IonicModule } from '@ionic/angular';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CounterChartComponent } from './counter-chart.component';
+import { CounterBarChartComponent } from './counter-bar-chart.component';
 
 @NgModule({
     imports: [
         IonicModule,
         CommonModule,
     ],
-    exports: [CounterChartComponent],
-    declarations: [CounterChartComponent]
+    exports: [CounterBarChartComponent],
+    declarations: [CounterBarChartComponent]
 })
-export class CounterChartComponentModule {
+export class CounterBarChartComponentModule {
 }

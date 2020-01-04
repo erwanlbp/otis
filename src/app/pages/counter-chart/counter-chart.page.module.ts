@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { CounterChartPage } from './counter-chart.page';
 import { RouterModule } from '@angular/router';
-import { CounterChartComponent } from '../../components/counter-chart/counter-chart.component';
 import { CounterChartComponentModule } from '../../components/counter-chart/counter-chart.component.module';
+import { CounterBarChartComponentModule } from 'src/app/components/counter-bar-chart/counter-bar-chart.component.module';
 
 @NgModule({
     imports: [
@@ -13,9 +13,13 @@ import { CounterChartComponentModule } from '../../components/counter-chart/coun
         FormsModule,
         IonicModule,
         RouterModule.forChild([
-            {path: ':counterName', component: CounterChartPage},
+            { path: ':counterName', component: CounterChartPage },
         ]),
         CounterChartComponentModule,
+        CounterBarChartComponentModule,
+    ],
+    providers: [
+        DatePipe,
     ],
     declarations: [CounterChartPage]
 })

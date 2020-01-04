@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CounterService } from '../../services/counter.service';
 import { Counter } from '../../interfaces/counter';
 import { AlertController } from '@ionic/angular';
 import { UtilsService } from '../../services/utils.service';
-import { take } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 import { auth } from 'firebase';
 
@@ -13,9 +13,10 @@ import { auth } from 'firebase';
     templateUrl: './add-counter.component.html',
     styleUrls: ['./add-counter.component.scss'],
 })
-export class AddCounterComponent implements OnInit {
+export class AddCounterComponent implements OnInit, OnDestroy {
 
-    connected$: Observable<boolean>;
+    private destroyed$: Subject<void> = new Subject();
+    connected: boolean;
 
     constructor(
         private counterService: CounterService,
@@ -26,11 +27,15 @@ export class AddCounterComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.connected$ = this.authService.isConnected$();
+        this.authService.isConnected$().pipe(takeUntil(this.destroyed$)).subscribe(isConnected => this.connected = isConnected);
     }
 
 
     createCounter() {
+        if (!this.connected) {
+            this.utilsService.showToast('Connectez vous pour créer un compteur');
+            return;
+        }
         this.askForNameAndValue()
             .then((counter: Counter) => {
                 if (!counter) {
@@ -79,5 +84,10 @@ export class AddCounterComponent implements OnInit {
                 ]
             }).then(alert => alert.present());
         });
+    }
+
+    ngOnDestroy() {
+        this.destroyed$.next();
+        this.destroyed$.unsubscribe();
     }
 }
