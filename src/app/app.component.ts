@@ -6,6 +6,7 @@ import { RouteConstants } from './constants/route.constants';
 import { AuthService } from './services/auth.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import * as jsonPackage from './../../package.json';
 
 @Component({
     selector: 'app-root',
@@ -15,6 +16,7 @@ import { map } from 'rxjs/operators';
 export class AppComponent implements OnInit {
 
     connected$: Observable<boolean>;
+    version: string = jsonPackage.version;
 
     pages = [
         {
