@@ -1,12 +1,11 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CounterService } from '../../services/counter.service';
 import { Counter } from '../../interfaces/counter';
 import { AlertController } from '@ionic/angular';
 import { UtilsService } from '../../services/utils.service';
 import { take, takeUntil } from 'rxjs/operators';
-import { Observable, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
-import { auth } from 'firebase';
 
 @Component({
     selector: 'app-add-counter',
@@ -79,7 +78,7 @@ export class AddCounterComponent implements OnInit, OnDestroy {
                     },
                     {
                         text: 'Confirmer',
-                        handler: (data) => resolve({ name: data.name, value: Number(data.value) })
+                        handler: (data) => resolve({name: data.name, value: Number(data.value)})
                     }
                 ]
             }).then(alert => alert.present());

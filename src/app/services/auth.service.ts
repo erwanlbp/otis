@@ -42,13 +42,13 @@ export class AuthService {
     mobileLogin(): Promise<firebase.auth.UserCredential> {
         let params;
         if (this.platform.is('android')) {
-            params = { webClientId: firebaseWebClientId, offline: true };
+            params = {webClientId: firebaseWebClientId, offline: true};
         } else {
             params = {};
         }
         return this.google.login(params)
             .then((response) => {
-                const { idToken, accessToken } = response;
+                const {idToken, accessToken} = response;
                 return this.onLoginSuccess(idToken, accessToken);
             });
     }

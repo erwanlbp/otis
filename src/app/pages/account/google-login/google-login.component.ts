@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, Platform } from '@ionic/angular';
+import { NavController } from '@ionic/angular';
 import { LoaderService } from '../../../services/loader.service';
 import { UtilsService } from '../../../services/utils.service';
 import { AuthService } from 'src/app/services/auth.service';
@@ -21,6 +21,7 @@ export class GoogleLoginComponent implements OnInit {
 
     ngOnInit() {
     }
+
     login() {
         this.loaderService.showLoader('Connexion en cours ...');
         this.authService.login()
