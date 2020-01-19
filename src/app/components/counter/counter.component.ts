@@ -30,18 +30,18 @@ export class CounterComponent implements OnInit {
     }
 
     decrement() {
-        this.loaderService.showLoader();
         this.counter.value--;
-        this.counterService.saveCounter(this.counter)
+        this.loaderService.showLoader()
+            .then(() => this.counterService.saveCounter(this.counter))
             .then(() => this.saveEvent('decrement'))
             .catch(err => console.log(err))
             .then(() => this.loaderService.dismissLoader());
     }
 
     increment() {
-        this.loaderService.showLoader();
         this.counter.value++;
-        this.counterService.saveCounter(this.counter)
+        this.loaderService.showLoader()
+            .then(() => this.counterService.saveCounter(this.counter))
             .then(() => this.saveEvent('increment'))
             .catch(err => console.log(err))
             .then(() => this.loaderService.dismissLoader());
