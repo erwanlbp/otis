@@ -9,7 +9,11 @@
 </ion-header>
 
 <ion-content>
-    <ion-list *ngIf="counterEvents">
-        <app-counter-event *ngFor="let event of counterEvents | async" [event]="event"></app-counter-event>
+    <ion-list *ngIf="counterEvents$">
+        <app-counter-event *ngFor="let event of counterEvents$ | async as events; index as i; last as isLast"
+                           [event]="event"
+                           [isLast]="isLast"
+                           [previousTimestamp]="i === 0 ? null : events[i-1].timestamp">
+        </app-counter-event>
     </ion-list>
 </ion-content>

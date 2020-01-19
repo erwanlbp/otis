@@ -12,7 +12,7 @@ import { switchMap } from 'rxjs/operators';
 })
 export class CounterEventsPage implements OnInit {
 
-    counterEvents: Observable<CounterEvent[]>;
+    counterEvents$: Observable<CounterEvent[]>;
     counterName: string;
 
     constructor(
@@ -22,7 +22,7 @@ export class CounterEventsPage implements OnInit {
     }
 
     ngOnInit(): void {
-        this.counterEvents = this.activatedRoute.params.pipe(
+        this.counterEvents$ = this.activatedRoute.params.pipe(
             switchMap(params => {
                 this.counterName = params.counterName;
                 return this.eventService.fetchCounterEvents$(this.counterName);

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
-import { map, switchMap, take, tap } from 'rxjs/operators';
+import { map, switchMap, take } from 'rxjs/operators';
 import { AuthService } from './auth.service';
 import { CounterEvent, toCounterEvent, toCounterEventDto } from '../interfaces/counter-event.interface';
 import { CounterService } from './counter.service';
@@ -32,16 +32,16 @@ export class EventService {
         ).toPromise();
     }
 
-    deleteCounterEvent(event: CounterEvent): Promise<void> {
-        return this.userCounterEventsDocument$(event.counterName).pipe(
+    deleteCounterEvent(counterName: string, timestamp: number): Promise<void> {
+        return this.userCounterEventsDocument$(counterName).pipe(
             take(1),
-            switchMap(doc => doc.doc<CounterEvent>(String(event.timestamp)).delete())
+            switchMap(doc => doc.doc<CounterEvent>(String(timestamp)).delete())
         ).toPromise();
     }
 
     fetchCounterEvents$(counterName: string): Observable<CounterEvent[]> {
         return this.userCounterEventsDocument$(counterName).pipe(
-            switchMap(doc => doc.valueChanges()),
+            switchMap(collection => collection.valueChanges()),
             map(events => !events ? [] : events.map(event => toCounterEvent(event, counterName))),
         );
     }

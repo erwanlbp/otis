@@ -1,10 +1,30 @@
-<ion-item>
-    <ion-icon slot="start" [name]="getIcon()"></ion-icon>
+<ion-item *ngIf="!editMode">
+    <ion-icon [name]="getIcon()" slot="start"></ion-icon>
     <ion-label>
-        {{event.timestamp | date:'short'}}
-        <ion-icon name="arrow-forward" class="ion-margin-horizontal"></ion-icon>
+        <span>{{event.timestamp | date:'dd/MM/yyyy HH:mm:ss'}}</span>
+        <ion-icon class="ion-margin-horizontal" name="arrow-forward"></ion-icon>
         <strong>{{event.newValue}}</strong>
     </ion-label>
+    <ion-button (click)="editMode = !editMode" *ngIf="isLast" color="dark" fill="clear" slot="end" title="Modifier la date et l'heure" type="button">
+        <ion-icon name="create"></ion-icon>
+    </ion-button>
+    <ion-button (click)="delete()" color="dark" fill="clear" slot="end" title="Supprimer l'événement" type="button">
+        <ion-icon name="trash"></ion-icon>
+    </ion-button>
+</ion-item>
+
+<ion-item *ngIf="editMode">
+    <ion-icon slot="start" [name]="getIcon()"></ion-icon>
+    <ion-label position="floating">
+        Changer la date et/ou l'heure de l'événement
+    </ion-label>
+    <ion-input #newTimestamp placeholder="{{event.timestamp | date:'dd/MM/yyyy HH:mm:ss'}}" style=" width:200px; display: inline-block" value="{{event.timestamp | date:'dd/MM/yyyy HH:mm:ss'}}"></ion-input>
+    <ion-button (click)="modifyEvent(newTimestamp.value)" [disabled]="timestampsAreEquals(newTimestamp.value)" color="dark" fill="clear" slot="end" title="Sauvegarder" type="button">
+        <ion-icon name="checkmark"></ion-icon>
+    </ion-button>
+    <ion-button (click)="editMode = !editMode" color="dark" fill="clear" slot="end" title="Annuler" type="button">
+        <ion-icon name="close"></ion-icon>
+    </ion-button>
     <ion-button (click)="delete()" color="dark" fill="clear" slot="end" type="button">
         <ion-icon name="trash"></ion-icon>
     </ion-button>
