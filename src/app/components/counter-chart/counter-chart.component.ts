@@ -1,8 +1,8 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import * as Highcharts from 'highcharts';
 import { CounterEvent } from '../../interfaces/counter-event.interface';
 import { Observable, Subject } from 'rxjs';
-import { takeUntil, count } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { Counter } from 'src/app/interfaces/counter';
 import HC_exporting from 'highcharts/modules/exporting';
 import Boost from 'highcharts/modules/boost';
@@ -42,7 +42,7 @@ export class CounterChartComponent implements OnInit, OnDestroy {
             enabled: false
         },
         tooltip: {
-            formatter: function () {
+            formatter() {
                 return Highcharts.dateFormat('%e %b %y %H:%M:%S', this.x);
             }
         },
@@ -80,7 +80,7 @@ export class CounterChartComponent implements OnInit, OnDestroy {
 
     private setExportOptions(options) {
         if (this.platform.is('cordova')) {
-            options.exporting = { enabled: false };
+            options.exporting = {enabled: false};
         } else {
             options.exporting = {
                 buttons: {
