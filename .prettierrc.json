@@ -4,7 +4,7 @@
     "quoteProps": "as-needed",
     "trailingComma": "all",
     "singleQuote": true,
-    "printWidth": 150,
+    "printWidth": 500,
     "useTabs": false,
     "bracketSpacing": true,
     "arrowParens": "avoid"

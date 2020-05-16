@@ -42,10 +42,16 @@ export class EventService {
         );
     }
 
-    fetchLastCounterEvents$(counterName: string, lastCount: number): Observable<CounterEvent[]> {
+    fetchChunkCounterEvents$(counterName: string, chunkSize: number, lastEventTs: number = null): Observable<CounterEvent[]> {
         return this.counterService.userCountersDocument$().pipe(
             map(doc =>
-                doc.doc<Counter>(counterName).collection<CounterEvent>('events', ref => ref.orderBy('timestamp', 'desc').limit(lastCount)),
+                doc.doc<Counter>(counterName).collection<CounterEvent>('events', ref => {
+                    let newRef = ref.orderBy('timestamp', 'desc');
+                    if (lastEventTs != null) {
+                        newRef = newRef.startAfter(lastEventTs);
+                    }
+                    return newRef.limit(chunkSize);
+                }),
             ),
             switchMap(collection => collection.valueChanges()),
             map(events => (!events ? [] : events.map(event => toCounterEvent(event, counterName)))),

@@ -9,13 +9,14 @@
 </ion-header>
 
 <ion-content>
-    <ion-list *ngIf="counterEvents$">
+    <ion-list *ngIf="counterEvents">
         <app-counter-event
-            *ngFor="let event of counterEvents$ | async as events; index as i; first as isLast"
+            *ngFor="let event of counterEvents ; index as i; first as isLast"
             [event]="event"
             [isLast]="isLast"
-            [previousTimestamp]="i === 0 ? null : events[i-1].timestamp"
+            [previousTimestamp]="i === 0 ? null : counterEvents[i-1].timestamp"
         >
         </app-counter-event>
+        <ion-button [hidden]="noMoreData || !counterEvents.length" (click)="loadMore()" fill="clear">Afficher plus d'évenements</ion-button>
     </ion-list>
 </ion-content>
