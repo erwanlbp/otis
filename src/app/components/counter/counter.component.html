@@ -1,6 +1,6 @@
 <ion-card class="counter">
     <ion-card-header>
-        <ion-card-subtitle *ngIf="counter">{{counter.name}}</ion-card-subtitle>
+        <ion-card-subtitle *ngIf="counter">{{ counter.name }}</ion-card-subtitle>
         <ion-card-subtitle *ngIf="!counter">--</ion-card-subtitle>
         <ion-button (click)="showMoreMenu($event)" class="counter-more-button" color="dark" fill="clear" size="small" type="button">
             <ion-icon name="more"></ion-icon>
@@ -15,8 +15,8 @@
                     </ion-button>
                 </ion-col>
 
-                <ion-col class="ion-align-self-center">
-                    <ion-label *ngIf="counter">{{counter.value}}</ion-label>
+                <ion-col class="ion-align-self-center" title="{{ counter.lastEventTs ? (counter.lastEventTs | date: 'short') : null }}">
+                    <ion-label *ngIf="counter">{{ counter.value }}</ion-label>
                     <ion-label *ngIf="!counter">--</ion-label>
                 </ion-col>
 

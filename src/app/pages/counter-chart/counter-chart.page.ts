@@ -33,9 +33,9 @@ export class CounterChartPage implements OnInit {
 
     ngOnInit() {
         const counterNameParam$ = this.activatedRoute.params.pipe(map(params => params.counterName));
-        this.counterEvents$ = counterNameParam$.pipe(switchMap(counterName => this.eventService.fetchCounterEvents$(counterName)));
+        this.counterEvents$ = counterNameParam$.pipe(switchMap(counterName => this.eventService.fetchAllCounterEvents$(counterName)));
         this.counterEventsDayAggregated$ = counterNameParam$.pipe(
-            switchMap(counterName => this.eventService.fetchCounterEvents$(counterName)),
+            switchMap(counterName => this.eventService.fetchAllCounterEvents$(counterName)),
             map(events => _.countBy(events, ((event: CounterEvent) => moment(event.timestamp).format('dddd')))),
             tap(x => console.log(x)),
             map(counts => Object.keys(counts).map(key => ({ label: key, value: counts[key] }))),

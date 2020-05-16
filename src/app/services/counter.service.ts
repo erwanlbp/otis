@@ -6,15 +6,10 @@ import { map, switchMap, take } from 'rxjs/operators';
 import { AuthService } from './auth.service';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class CounterService {
-
-    constructor(
-        private firestore: AngularFirestore,
-        private authService: AuthService,
-    ) {
-    }
+    constructor(private firestore: AngularFirestore, private authService: AuthService) {}
 
     userCountersDocument$(): Observable<AngularFirestoreCollection<Counter>> {
         return this.authService.getUserId$().pipe(
@@ -23,7 +18,7 @@ export class CounterService {
                     return null;
                 }
                 return this.firestore.collection<Counter>(`users/${userId}/counters`);
-            })
+            }),
         );
     }
 
@@ -34,27 +29,39 @@ export class CounterService {
                     return of([]);
                 }
                 return doc.valueChanges();
-            })
+            }),
         );
     }
 
     saveCounter(counter: Counter): Promise<void> {
-        return this.userCountersDocument$().pipe(
-            take(1),
-            switchMap(doc => doc.doc(counter.name).set(counter))
-        ).toPromise();
+        return this.userCountersDocument$()
+            .pipe(
+                take(1),
+                switchMap(doc => doc.doc(counter.name).set(counter)),
+            )
+            .toPromise();
+    }
+
+    updateLastEventTs(counterName: string, timestamp: number) {
+        const partialCounter: Partial<Counter> = { lastEventTs: timestamp };
+        return this.userCountersDocument$()
+            .pipe(
+                take(1),
+                switchMap(doc => doc.doc(counterName).update(partialCounter)),
+            )
+            .toPromise();
     }
 
     deleteCounter(counter: Counter): Promise<void> {
-        return this.userCountersDocument$().pipe(
-            take(1),
-            switchMap(doc => doc.doc(counter.name).delete())
-        ).toPromise();
+        return this.userCountersDocument$()
+            .pipe(
+                take(1),
+                switchMap(doc => doc.doc(counter.name).delete()),
+            )
+            .toPromise();
     }
 
     fetchCounter$(name: string): Observable<Counter> {
-        return this.userCountersDocument$().pipe(
-            switchMap(doc => doc.doc<Counter>(name).valueChanges())
-        );
+        return this.userCountersDocument$().pipe(switchMap(doc => doc.doc<Counter>(name).valueChanges()));
     }
 }

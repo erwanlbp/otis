@@ -8,25 +8,20 @@ import { switchMap } from 'rxjs/operators';
 @Component({
     selector: 'app-counter-events',
     templateUrl: './counter-events.page.html',
-    styleUrls: ['./counter-events.page.scss']
+    styleUrls: ['./counter-events.page.scss'],
 })
 export class CounterEventsPage implements OnInit {
-
     counterEvents$: Observable<CounterEvent[]>;
     counterName: string;
 
-    constructor(
-        private eventService: EventService,
-        private activatedRoute: ActivatedRoute,
-    ) {
-    }
+    constructor(private eventService: EventService, private activatedRoute: ActivatedRoute) {}
 
     ngOnInit(): void {
         this.counterEvents$ = this.activatedRoute.params.pipe(
             switchMap(params => {
                 this.counterName = params.counterName;
-                return this.eventService.fetchCounterEvents$(this.counterName);
-            })
+                return this.eventService.fetchLastCounterEvents$(this.counterName, 20);
+            }),
         );
     }
 }

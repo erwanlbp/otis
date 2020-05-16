@@ -8,41 +8,47 @@ import { CounterService } from './counter.service';
 import { Counter } from '../interfaces/counter';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class EventService {
-
-    constructor(
-        private firestore: AngularFirestore,
-        private authService: AuthService,
-        private counterService: CounterService,
-    ) {
-    }
+    constructor(private firestore: AngularFirestore, private authService: AuthService, private counterService: CounterService) {}
 
     private userCounterEventsDocument$(counterName: string): Observable<AngularFirestoreCollection<CounterEvent>> {
-        return this.counterService.userCountersDocument$().pipe(
-            map(doc => doc.doc<Counter>(counterName).collection<CounterEvent>('events'))
-        );
+        return this.counterService.userCountersDocument$().pipe(map(doc => doc.doc<Counter>(counterName).collection<CounterEvent>('events')));
     }
 
     saveCounterEvent(event: CounterEvent): Promise<void> {
-        return this.userCounterEventsDocument$(event.counterName).pipe(
-            take(1),
-            switchMap(doc => doc.doc(String(event.timestamp)).set(toCounterEventDto(event)))
-        ).toPromise();
+        return this.userCounterEventsDocument$(event.counterName)
+            .pipe(
+                take(1),
+                switchMap(doc => doc.doc(String(event.timestamp)).set(toCounterEventDto(event))),
+            )
+            .toPromise();
     }
 
     deleteCounterEvent(counterName: string, timestamp: number): Promise<void> {
-        return this.userCounterEventsDocument$(counterName).pipe(
-            take(1),
-            switchMap(doc => doc.doc<CounterEvent>(String(timestamp)).delete())
-        ).toPromise();
+        return this.userCounterEventsDocument$(counterName)
+            .pipe(
+                take(1),
+                switchMap(doc => doc.doc<CounterEvent>(String(timestamp)).delete()),
+            )
+            .toPromise();
     }
 
-    fetchCounterEvents$(counterName: string): Observable<CounterEvent[]> {
+    fetchAllCounterEvents$(counterName: string): Observable<CounterEvent[]> {
         return this.userCounterEventsDocument$(counterName).pipe(
             switchMap(collection => collection.valueChanges()),
-            map(events => !events ? [] : events.map(event => toCounterEvent(event, counterName))),
+            map(events => (!events ? [] : events.map(event => toCounterEvent(event, counterName)))),
+        );
+    }
+
+    fetchLastCounterEvents$(counterName: string, lastCount: number): Observable<CounterEvent[]> {
+        return this.counterService.userCountersDocument$().pipe(
+            map(doc =>
+                doc.doc<Counter>(counterName).collection<CounterEvent>('events', ref => ref.orderBy('timestamp', 'desc').limit(lastCount)),
+            ),
+            switchMap(collection => collection.valueChanges()),
+            map(events => (!events ? [] : events.map(event => toCounterEvent(event, counterName)))),
         );
     }
 }

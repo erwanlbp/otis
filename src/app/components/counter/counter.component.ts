@@ -13,7 +13,6 @@ import { CounterMorePopoverComponent } from '../counter-more-popover/counter-mor
     styleUrls: ['./counter.component.scss'],
 })
 export class CounterComponent implements OnInit {
-
     @Input() counter: Counter;
 
     constructor(
@@ -23,15 +22,15 @@ export class CounterComponent implements OnInit {
         private utilsService: UtilsService,
         private loaderService: LoaderService,
         private popoverController: PopoverController,
-    ) {
-    }
+    ) {}
 
-    ngOnInit() {
-    }
+    ngOnInit() {}
 
     decrement() {
         this.counter.value--;
-        this.loaderService.showLoader()
+        this.counter.lastEventTs = new Date().getTime();
+        this.loaderService
+            .showLoader()
             .then(() => this.counterService.saveCounter(this.counter))
             .then(() => this.saveEvent('decrement'))
             .catch(err => console.log(err))
@@ -40,7 +39,9 @@ export class CounterComponent implements OnInit {
 
     increment() {
         this.counter.value++;
-        this.loaderService.showLoader()
+        this.counter.lastEventTs = new Date().getTime();
+        this.loaderService
+            .showLoader()
             .then(() => this.counterService.saveCounter(this.counter))
             .then(() => this.saveEvent('increment'))
             .catch(err => console.log(err))
@@ -49,7 +50,7 @@ export class CounterComponent implements OnInit {
 
     private saveEvent(type: string): Promise<void> {
         return this.eventService.saveCounterEvent({
-            timestamp: new Date().getTime(),
+            timestamp: this.counter.lastEventTs,
             counterName: this.counter.name,
             type,
             newValue: this.counter.value,
@@ -60,7 +61,7 @@ export class CounterComponent implements OnInit {
         const popover = await this.popoverController.create({
             component: CounterMorePopoverComponent,
             event,
-            componentProps: {counter: this.counter}
+            componentProps: { counter: this.counter },
         });
         await popover.present();
     }
