@@ -23,7 +23,6 @@ HC_export_data(Highcharts);
     styleUrls: ['./counter-bar-chart.component.scss'],
 })
 export class CounterBarChartComponent implements OnInit, OnDestroy {
-
     randomId: string = Math.random().toString(36).substring(2, 15);
     private destroyed$: Subject<void> = new Subject<void>();
 
@@ -37,10 +36,10 @@ export class CounterBarChartComponent implements OnInit, OnDestroy {
             zoomType: 'x',
         },
         title: {
-            text: 'Inconnu'
+            text: 'Inconnu',
         },
         credits: {
-            enabled: false
+            enabled: false,
         },
         tooltip: {
             // formatter() {
@@ -53,17 +52,14 @@ export class CounterBarChartComponent implements OnInit, OnDestroy {
         },
         yAxis: {
             title: {
-                text: 'Somme du compteur'
+                text: 'Somme du compteur',
             },
             allowDecimals: false,
         },
         series: [],
     };
 
-    constructor(
-        private platform: Platform,
-    ) {
-    }
+    constructor(private platform: Platform) {}
 
     ngOnInit() {
         this.setExportOptions(this.options);
@@ -80,17 +76,14 @@ export class CounterBarChartComponent implements OnInit, OnDestroy {
 
     private setExportOptions(options) {
         if (this.platform.is('cordova')) {
-            options.exporting = {enabled: false};
+            options.exporting = { enabled: false };
         } else {
             options.exporting = {
                 buttons: {
                     contextButton: {
-                        menuItems: [
-                            'downloadPNG',
-                            'downloadCSV',
-                        ]
-                    }
-                }
+                        menuItems: ['downloadPNG', 'downloadCSV'],
+                    },
+                },
             };
         }
     }
@@ -102,7 +95,7 @@ export class CounterBarChartComponent implements OnInit, OnDestroy {
             labels.push(event.label);
             data.push(event.value);
         });
-        return [labels, [{data, name: 'Nombre d\'événements'}]];
+        return [labels, [{ data, name: "Nombre d'événements" }]];
     }
 
     ngOnDestroy() {

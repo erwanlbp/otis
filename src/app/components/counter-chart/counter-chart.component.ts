@@ -23,7 +23,6 @@ HC_export_data(Highcharts);
     styleUrls: ['./counter-chart.component.scss'],
 })
 export class CounterChartComponent implements OnInit, OnDestroy {
-
     randomId: string = Math.random().toString(36).substring(2, 15);
     private destroyed$: Subject<void> = new Subject<void>();
 
@@ -36,33 +35,29 @@ export class CounterChartComponent implements OnInit, OnDestroy {
             zoomType: 'x',
         },
         title: {
-            text: 'Inconnu'
+            text: 'Inconnu',
         },
         credits: {
-            enabled: false
+            enabled: false,
         },
         tooltip: {
             formatter() {
                 return Highcharts.dateFormat('%e %b %y %H:%M:%S', this.x);
-            }
+            },
         },
         xAxis: {
             type: 'datetime',
-
         },
         yAxis: {
             title: {
-                text: 'Valeur du compteur'
+                text: 'Valeur du compteur',
             },
             allowDecimals: false,
         },
         series: [],
     };
 
-    constructor(
-        private platform: Platform,
-    ) {
-    }
+    constructor(private platform: Platform) {}
 
     ngOnInit() {
         this.setExportOptions(this.options);
@@ -70,27 +65,26 @@ export class CounterChartComponent implements OnInit, OnDestroy {
             this.options.title.text = counter.name;
         });
         this.events.pipe(takeUntil(this.destroyed$)).subscribe(events => {
-            this.options.series = [{
-                name: 'Evénements',
-                data: events.map(event => [event.timestamp, event.newValue]),
-            }];
+            this.options.series = [
+                {
+                    name: 'Evénements',
+                    data: events.map(event => [event.timestamp, event.newValue]),
+                },
+            ];
             Highcharts.chart(this.randomId, this.options);
         });
     }
 
     private setExportOptions(options) {
         if (this.platform.is('cordova')) {
-            options.exporting = {enabled: false};
+            options.exporting = { enabled: false };
         } else {
             options.exporting = {
                 buttons: {
                     contextButton: {
-                        menuItems: [
-                            'downloadPNG',
-                            'downloadCSV',
-                        ]
-                    }
-                }
+                        menuItems: ['downloadPNG', 'downloadCSV'],
+                    },
+                },
             };
         }
     }

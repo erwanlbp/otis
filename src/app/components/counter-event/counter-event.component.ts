@@ -29,12 +29,7 @@ export class CounterEventComponent implements OnInit {
     @Input() isLast = false;
     @Input() previousTimestamp: number;
 
-    constructor(
-        private eventService: EventService,
-        private utilsService: UtilsService,
-        private loaderService: LoaderService,
-        private counterService: CounterService,
-    ) {}
+    constructor(private eventService: EventService, private utilsService: UtilsService, private loaderService: LoaderService, private counterService: CounterService) {}
 
     ngOnInit() {}
 
@@ -43,7 +38,7 @@ export class CounterEventComponent implements OnInit {
             if (!confirmed) {
                 return;
             }
-            this.eventService.deleteCounterEvent(this.event.counterName, this.event.timestamp);
+            this.eventService.deleteCounterEvent(this.event.counterName, this.event.id);
         });
     }
 
@@ -73,22 +68,17 @@ export class CounterEventComponent implements OnInit {
             this.utilsService.showToast("La date et l'heure ne peuvent pas être dans le futur");
             return;
         }
-        const oldTimestamp: number = this.event.timestamp;
         this.event.timestamp = newTimestamp;
         this.editMode = false;
         this.loaderService
             .showLoader()
-            .then(() => this.eventService.saveCounterEvent(this.event))
-            .then(() => {
-                return this.eventService.deleteCounterEvent(this.event.counterName, oldTimestamp);
-            })
+            .then(() => this.eventService.saveCounterEvent(this.event, this.event.id))
             .then(() => this.counterService.updateLastEventTs(this.event.counterName, this.event.timestamp))
-            .then(() => this.loaderService.dismissLoader())
             .catch(err => {
-                console.log(err);
-                this.loaderService.dismissLoader();
+                console.error(err);
                 this.utilsService.showToast('Echec de la sauvegarde');
-            });
+            })
+            .then(() => this.loaderService.dismissLoader());
     }
 
     timestampsAreEquals(newDateTime: string) {

@@ -15,14 +15,7 @@ import { CounterMorePopoverComponent } from '../counter-more-popover/counter-mor
 export class CounterComponent implements OnInit {
     @Input() counter: Counter;
 
-    constructor(
-        private navController: NavController,
-        private counterService: CounterService,
-        private eventService: EventService,
-        private utilsService: UtilsService,
-        private loaderService: LoaderService,
-        private popoverController: PopoverController,
-    ) {}
+    constructor(private navController: NavController, private counterService: CounterService, private eventService: EventService, private utilsService: UtilsService, private loaderService: LoaderService, private popoverController: PopoverController) {}
 
     ngOnInit() {}
 

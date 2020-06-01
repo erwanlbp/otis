@@ -1,4 +1,5 @@
 export interface CounterEvent {
+    id?: string;
     counterName: string;
     timestamp: number;
     newValue: number;
@@ -11,11 +12,12 @@ export interface CounterEventFirebaseDto {
     type: string;
 }
 
-export function toCounterEvent(eventDto: CounterEventFirebaseDto, counterName: string): CounterEvent {
+export function toCounterEvent(id: string, eventDto: CounterEventFirebaseDto, counterName: string): CounterEvent {
     if (!eventDto) {
         return null;
     }
     return {
+        id,
         counterName,
         newValue: eventDto.newValue,
         timestamp: eventDto.timestamp,
