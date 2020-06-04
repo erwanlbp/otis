@@ -34,3 +34,5 @@ otis.keystore
 .firebase/
 .gradle/
 debug-signing.properties
+*.js
+functions/other/otis-count-firebase-adminsdk-d3q9t-628c996b45.json
