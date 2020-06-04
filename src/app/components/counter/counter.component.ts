@@ -6,6 +6,7 @@ import { EventService } from '../../services/event.service';
 import { LoaderService } from '../../services/loader.service';
 import { NavController, PopoverController } from '@ionic/angular';
 import { CounterMorePopoverComponent } from '../counter-more-popover/counter-more-popover.component';
+import { EventType } from '../../interfaces/event-type.type';
 
 @Component({
     selector: 'app-counter',
@@ -41,7 +42,7 @@ export class CounterComponent implements OnInit {
             .then(() => this.loaderService.dismissLoader());
     }
 
-    private saveEvent(type: string): Promise<void> {
+    private saveEvent(type: EventType): Promise<void> {
         return this.eventService.saveCounterEvent({
             timestamp: this.counter.lastEventTs,
             counterName: this.counter.name,

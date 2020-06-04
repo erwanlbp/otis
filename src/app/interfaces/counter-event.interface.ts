@@ -1,18 +1,20 @@
+import { EventType } from './event-type.type';
+
 export interface CounterEvent {
     id?: string;
     counterName: string;
     timestamp: number;
     newValue: number;
-    type: string;
+    type: EventType;
 }
 
 export interface CounterEventFirebaseDto {
     timestamp: number;
     newValue: number;
-    type: string;
+    type: EventType;
 }
 
-export function toCounterEvent(id: string, eventDto: CounterEventFirebaseDto, counterName: string): CounterEvent {
+export function toCounterEvent(id: string, eventDto: CounterEventFirebaseDto, counterName: string): CounterEvent | null {
     if (!eventDto) {
         return null;
     }
@@ -25,7 +27,7 @@ export function toCounterEvent(id: string, eventDto: CounterEventFirebaseDto, co
     };
 }
 
-export function toCounterEventDto(event: CounterEvent): CounterEventFirebaseDto {
+export function toCounterEventDto(event: CounterEvent): CounterEventFirebaseDto | null {
     if (!event) {
         return null;
     }

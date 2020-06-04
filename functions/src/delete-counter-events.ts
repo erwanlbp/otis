@@ -1,7 +1,7 @@
 import * as functions from 'firebase-functions';
 import * as admin from "firebase-admin";
 
-export const deleteteCounterEvents = functions
+export const func = functions
     .region("europe-west1")
     .firestore.document('users/{userId}/counters/{counterId}')
     .onDelete((snapshot, context) => {

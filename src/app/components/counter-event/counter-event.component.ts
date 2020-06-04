@@ -5,6 +5,7 @@ import { EventService } from '../../services/event.service';
 import * as moment from 'moment';
 import { LoaderService } from '../../services/loader.service';
 import { CounterService } from '../../services/counter.service';
+import { getEventTypeIcon } from '../../interfaces/event-type.type';
 
 interface CounterEventWithDate extends CounterEvent {
     date: Date;
@@ -43,14 +44,7 @@ export class CounterEventComponent implements OnInit {
     }
 
     getIcon(): string {
-        switch (this.event.type) {
-            case 'increment':
-                return 'add';
-            case 'decrement':
-                return 'remove';
-            default:
-                return 'help';
-        }
+        return getEventTypeIcon(this.event.type);
     }
 
     modifyEvent(value: string) {
