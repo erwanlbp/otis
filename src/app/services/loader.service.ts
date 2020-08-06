@@ -15,8 +15,8 @@ export class LoaderService {
 
     async showLoader(msg?: string): Promise<void> {
         if (this.loading) {
-            await this.dismissLoader();
-            return this.showLoader(msg);
+            this.loading.message = msg;
+            return Promise.resolve();
         }
         this.loading = await this.loadingController.create({
             message: msg,
