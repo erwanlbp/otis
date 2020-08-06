@@ -6,18 +6,26 @@ import { AuthService } from './auth.service';
 import { CounterEvent, toCounterEvent, toCounterEventDto } from '../interfaces/counter-event.interface';
 import { CounterService } from './counter.service';
 import { Counter } from '../interfaces/counter';
+import * as moment from 'moment';
+import { UtilsService } from './utils.service';
 
 @Injectable({
     providedIn: 'root',
 })
 export class EventService {
-    constructor(private firestore: AngularFirestore, private authService: AuthService, private counterService: CounterService) {}
+    constructor(
+        private firestore: AngularFirestore,
+        private authService: AuthService,
+        private counterService: CounterService,
+        private utilsService: UtilsService,
+    ) {
+    }
 
     private userCounterEventsDocument$(counterName: string): Observable<AngularFirestoreCollection<CounterEvent>> {
         return this.counterService.userCountersDocument$().pipe(map(doc => doc.doc<Counter>(counterName).collection<CounterEvent>('events')));
     }
 
-    saveCounterEvent(event: CounterEvent, eventId?: string): Promise<void> {
+    private saveCounterEvent(event: CounterEvent, eventId?: string): Promise<void> {
         return this.userCounterEventsDocument$(event.counterName)
             .pipe(
                 take(1),
@@ -25,6 +33,11 @@ export class EventService {
                 tap(() => (event.id = eventId || String(event.timestamp))),
             )
             .toPromise();
+    }
+
+    saveCounterEventAndSideEffects(event: CounterEvent, eventId?: string): Promise<void> {
+        return this.saveCounterEvent(event, eventId)
+            .then(() => this.counterService.updateLastEventTsAndValue(event.counterName, event.timestamp, event.newValue));
     }
 
     deleteCounterEvent(counterName: string, id: string): Promise<void> {
@@ -57,5 +70,32 @@ export class EventService {
             switchMap(collection => collection.snapshotChanges()),
             map(events => (!events ? [] : events.map(event => toCounterEvent(event.payload.doc.id, event.payload.doc.data(), counterName)))),
         );
+    }
+
+    assertValidEventDate(counterName: string, date: string): Promise<boolean> {
+        const momentDate = moment(date, 'DD/MM/YYYY HH:mm:ss', true);
+        if (!momentDate.isValid()) {
+            this.utilsService.showToast('Le format de date n\'est pas valide');
+            return Promise.resolve(false);
+        }
+        const newTimestamp: number = momentDate.toDate().getTime();
+        if (newTimestamp > moment().toDate().getTime()) {
+            this.utilsService.showToast('La date et l\'heure ne peuvent pas être dans le futur');
+            return Promise.resolve(false);
+        }
+        return this.fetchChunkCounterEvents$(counterName, 2).pipe(take(1)).toPromise()
+            .then(chunk => {
+                const previousTimestamp = chunk.length === 2 ? chunk[1].timestamp : null;
+                if (previousTimestamp && newTimestamp <= previousTimestamp) {
+                    this.utilsService.showToast('L\'événement doit rester le dernier de la liste');
+                    return false;
+                }
+                return true;
+            })
+            .catch(err => {
+                console.error('failed fetching last event ::', err);
+                this.utilsService.showToast('Une erreur est survenue');
+                return false;
+            });
     }
 }

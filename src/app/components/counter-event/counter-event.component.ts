@@ -30,9 +30,11 @@ export class CounterEventComponent implements OnInit {
     @Input() isLast = false;
     @Input() previousTimestamp: number;
 
-    constructor(private eventService: EventService, private utilsService: UtilsService, private loaderService: LoaderService, private counterService: CounterService) {}
+    constructor(private eventService: EventService, private utilsService: UtilsService, private loaderService: LoaderService, private counterService: CounterService) {
+    }
 
-    ngOnInit() {}
+    ngOnInit() {
+    }
 
     delete() {
         this.utilsService.askForConfirmation().then(confirmed => {
@@ -48,28 +50,20 @@ export class CounterEventComponent implements OnInit {
     }
 
     modifyEvent(value: string) {
-        const momentDate = moment(value, 'DD/MM/YYYY HH:mm:ss', true);
-        if (!momentDate.isValid()) {
-            this.utilsService.showToast("Le format de date n'est pas valide");
-            return;
-        }
-        const newTimestamp: number = momentDate.toDate().getTime();
-        if (this.previousTimestamp && newTimestamp <= this.previousTimestamp) {
-            this.utilsService.showToast("L'événement doit rester le dernier de la liste");
-            return;
-        }
-        if (newTimestamp > new Date().getTime()) {
-            this.utilsService.showToast("La date et l'heure ne peuvent pas être dans le futur");
-            return;
-        }
-        this.event.timestamp = newTimestamp;
-        this.editMode = false;
-        this.loaderService
-            .showLoader()
-            .then(() => this.eventService.saveCounterEvent(this.event, this.event.id))
-            .then(() => this.counterService.updateLastEventTs(this.event.counterName, this.event.timestamp))
+        return this.loaderService.showLoader('Validation de la date ...')
+            .then(() => this.eventService.assertValidEventDate(this.event.counterName, value))
+            .then(async isValid => {
+                if (!isValid) {
+                    console.error('event date is not valid, nothing to do');
+                    return;
+                }
+                await this.loaderService.showLoader('Sauvegarde ...');
+                this.event.timestamp = moment(value, 'DD/MM/YYYY HH:mm:ss', true).toDate().getTime();
+                this.editMode = false;
+                return this.eventService.saveCounterEventAndSideEffects(this.event, this.event.id);
+            })
             .catch(err => {
-                console.error(err);
+                console.error('failed editing event ::', err);
                 this.utilsService.showToast('Echec de la sauvegarde');
             })
             .then(() => this.loaderService.dismissLoader());

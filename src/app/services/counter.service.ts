@@ -9,7 +9,8 @@ import { AuthService } from './auth.service';
     providedIn: 'root',
 })
 export class CounterService {
-    constructor(private firestore: AngularFirestore, private authService: AuthService) {}
+    constructor(private firestore: AngularFirestore, private authService: AuthService) {
+    }
 
     userCountersDocument$(): Observable<AngularFirestoreCollection<Counter>> {
         return this.authService.getUserId$().pipe(
@@ -42,8 +43,11 @@ export class CounterService {
             .toPromise();
     }
 
-    updateLastEventTs(counterName: string, timestamp: number) {
-        const partialCounter: Partial<Counter> = { lastEventTs: timestamp };
+    updateLastEventTsAndValue(counterName: string, timestamp: number, value: number) {
+        const partialCounter: Partial<Counter> = {
+            lastEventTs: timestamp,
+            value,
+        };
         return this.userCountersDocument$()
             .pipe(
                 take(1),

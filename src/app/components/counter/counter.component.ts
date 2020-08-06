@@ -7,6 +7,7 @@ import { LoaderService } from '../../services/loader.service';
 import { NavController, PopoverController } from '@ionic/angular';
 import { CounterMorePopoverComponent } from '../counter-more-popover/counter-more-popover.component';
 import { EventType } from '../../interfaces/event-type.type';
+import * as moment from 'moment';
 
 @Component({
     selector: 'app-counter',
@@ -22,28 +23,24 @@ export class CounterComponent implements OnInit {
 
     decrement() {
         this.counter.value--;
-        this.counter.lastEventTs = new Date().getTime();
-        this.loaderService
-            .showLoader()
-            .then(() => this.counterService.saveCounter(this.counter))
+        this.counter.lastEventTs = moment().toDate().getTime();
+        this.loaderService.showLoader('Sauvegarde ...')
             .then(() => this.saveEvent('decrement'))
-            .catch(err => console.log(err))
+            .catch(err => console.error('failed decrementing counter ::', err))
             .then(() => this.loaderService.dismissLoader());
     }
 
     increment() {
         this.counter.value++;
-        this.counter.lastEventTs = new Date().getTime();
-        this.loaderService
-            .showLoader()
-            .then(() => this.counterService.saveCounter(this.counter))
+        this.counter.lastEventTs = moment().toDate().getTime();
+        this.loaderService.showLoader('Sauvegarde ...')
             .then(() => this.saveEvent('increment'))
-            .catch(err => console.log(err))
+            .catch(err => console.error('failed incrementing counter ::', err))
             .then(() => this.loaderService.dismissLoader());
     }
 
     private saveEvent(type: EventType): Promise<void> {
-        return this.eventService.saveCounterEvent({
+        return this.eventService.saveCounterEventAndSideEffects({
             timestamp: this.counter.lastEventTs,
             counterName: this.counter.name,
             type,
