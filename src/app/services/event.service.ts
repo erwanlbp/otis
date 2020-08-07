@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { map, switchMap, take, tap } from 'rxjs/operators';
-import { AuthService } from './auth.service';
 import { CounterEvent, toCounterEvent, toCounterEventDto } from '../interfaces/counter-event.interface';
 import { CounterService } from './counter.service';
 import { Counter } from '../interfaces/counter';
@@ -15,7 +14,6 @@ import { UtilsService } from './utils.service';
 export class EventService {
     constructor(
         private firestore: AngularFirestore,
-        private authService: AuthService,
         private counterService: CounterService,
         private utilsService: UtilsService,
     ) {
@@ -35,6 +33,9 @@ export class EventService {
             .toPromise();
     }
 
+    /**
+     * eventId is used only for updating, it's the primary key of the event
+     */
     saveCounterEventAndSideEffects(event: CounterEvent, eventId?: string): Promise<void> {
         return this.saveCounterEvent(event, eventId)
             .then(() => this.counterService.updateLastEventTsAndValue(event.counterName, event.timestamp, event.newValue));

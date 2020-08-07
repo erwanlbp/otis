@@ -4,6 +4,8 @@ import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/fire
 import { map, switchMap, take } from 'rxjs/operators';
 import { AuthService } from './auth.service';
 import { TimeCounter } from '../interfaces/time-counter.interface';
+import { TimeCounterEventService } from './time-counter-event.service';
+import { TimeCounterEvent } from '../interfaces/time-counter-event.interface';
 
 @Injectable({
     providedIn: 'root',
@@ -13,6 +15,7 @@ export class TimeCounterService {
     constructor(
         private firestore: AngularFirestore,
         private authService: AuthService,
+        private timeCounterEventService: TimeCounterEventService,
     ) {
     }
 
@@ -63,5 +66,29 @@ export class TimeCounterService {
 
     fetchTimeCounter$(name: string): Observable<TimeCounter> {
         return this.userTimeCountersDocument$().pipe(switchMap(doc => doc.doc<TimeCounter>(name).valueChanges()));
+    }
+
+    startCounter(name: string): Promise<void> {
+        const partialTimeCounter: Partial<TimeCounter> = { startTimestamp: new Date().getTime() };
+        return this.userTimeCountersDocument$()
+            .pipe(
+                take(1),
+                switchMap(doc => doc.doc(name).update(partialTimeCounter)),
+            ).toPromise();
+    }
+
+    stopCounter(name: string): Promise<void> {
+        return this.fetchTimeCounter$(name).pipe(
+            take(1),
+            switchMap(doc => {
+                const event: TimeCounterEvent = {
+                    timeCounterName: name,
+                    startTimestamp: doc.startTimestamp,
+                    endTimestamp: new Date().getTime(),
+                };
+                return this.timeCounterEventService.saveCounterEvent(event);
+            }),
+            switchMap(() => this.saveTimeCounter({ name })),
+        ).toPromise();
     }
 }

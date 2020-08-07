@@ -4,6 +4,7 @@ import { PopoverController } from '@ionic/angular';
 import { TimeCounter } from '../../interfaces/time-counter.interface';
 import { UtilsService } from '../../services/utils.service';
 import { TimeCounterMorePopoverComponent } from '../time-counter-more-popover/time-counter-more-popover.component';
+import { TimeCounterService } from '../../services/time-counter.service';
 
 @Component({
     selector: 'app-time-counter',
@@ -17,6 +18,7 @@ export class TimeCounterComponent implements OnInit {
     constructor(
         private loaderService: LoaderService,
         private popoverController: PopoverController,
+        private timeCounterService: TimeCounterService,
         private utilsService: UtilsService,
     ) {
     }
@@ -33,7 +35,23 @@ export class TimeCounterComponent implements OnInit {
         await popover.present();
     }
 
-    startStop() {
-        this.utilsService.showToast('Lancement du compteur ' + this.timeCounter.name);
+    start() {
+        this.loaderService.showLoader('Lancement ...')
+            .then(() => this.timeCounterService.startCounter(this.timeCounter.name))
+            .catch(err => {
+                console.error('failed starting time counter ::', err);
+                this.utilsService.showToast('Une erreur est survenue');
+            })
+            .then(() => this.loaderService.dismissLoader());
+    }
+
+    stop() {
+        this.loaderService.showLoader('Arrêt ...')
+            .then(() => this.timeCounterService.stopCounter(this.timeCounter.name))
+            .catch(err => {
+                console.error('failed stoping time counter ::', err);
+                this.utilsService.showToast('Une erreur est survenue');
+            })
+            .then(() => this.loaderService.dismissLoader());
     }
 }

@@ -15,8 +15,8 @@
             </ion-row>
             <ion-row>
                 <ion-col class="ion-align-self-center">
-                    <ion-button (click)="startStop()" [disabled]="true || !timeCounter" size="small">
-                        <ion-icon slot="start" name="clock"></ion-icon>
+                    <ion-button (click)="!timeCounter.startTimestamp ? start() : stop()" [disabled]="!timeCounter" size="small">
+                        <ion-icon slot="start" name="stopwatch"></ion-icon>
                         <span *ngIf="!timeCounter.startTimestamp">Démarrer</span>
                         <span *ngIf="timeCounter.startTimestamp">Arrêter</span>
                     </ion-button>

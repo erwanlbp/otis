@@ -8,7 +8,7 @@ import { firebaseWebClientId } from 'src/environments/firebase.config';
 import * as firebase from 'firebase/app';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class AuthService {
 
