@@ -45,7 +45,7 @@ export class TimeCounterMorePopoverComponent implements OnInit {
     }
 
     events() {
-        this.navController.navigateForward(`/counter-events/${this.timeCounter.name}`)
+        this.navController.navigateForward(`/time-counter-events/${this.timeCounter.name}`)
             .then(() => this.close());
     }
 }

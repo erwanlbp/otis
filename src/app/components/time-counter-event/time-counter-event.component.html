@@ -1,0 +1,13 @@
+<ion-item>
+    <ion-icon name="hourglass" slot="start"></ion-icon>
+    <ion-label>
+<!--        <span>{{event.startTimestamp | date:'dd/MM/yyyy HH:mm:ss' }}</span>-->
+<!--        <ion-icon class="ion-margin-horizontal" name="arrow-forward"></ion-icon>-->
+<!--        <span>{{event.endTimestamp | date:'dd/MM/yyyy HH:mm:ss' }}</span>-->
+<!--        <ion-icon class="ion-margin-horizontal" name="arrow-forward"></ion-icon>-->
+        <strong>{{event.duration | duration}}</strong>
+    </ion-label>
+    <ion-button (click)="delete()" color="dark" fill="clear" slot="end" title="Supprimer l'événement" type="button">
+        <ion-icon name="trash"></ion-icon>
+    </ion-button>
+</ion-item>

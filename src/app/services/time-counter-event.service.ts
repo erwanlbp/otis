@@ -39,13 +39,12 @@ export class TimeCounterEventService {
             .toPromise();
     }
 
-    deleteCounterEvent(timeCounterName: string, id: string): Promise<void> {
+    deleteTimeCounterEvent(timeCounterName: string, id: string): Promise<void> {
         return this.userTimeCounterEventsDocument$(timeCounterName)
             .pipe(
                 take(1),
                 switchMap(doc => doc.doc<TimeCounterEvent>(id).delete()),
-            )
-            .toPromise();
+            ).toPromise();
     }
 
     fetchAllCounterEvents$(timeCounterName: string): Observable<TimeCounterEvent[]> {
