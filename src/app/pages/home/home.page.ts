@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Counter } from '../../interfaces/counter';
 import { CounterService } from '../../services/counter.service';
-import { Observable } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import { LoaderService } from '../../services/loader.service';
 import { take } from 'rxjs/operators';
+import { TimeCounter } from '../../interfaces/time-counter.interface';
+import { TimeCounterService } from '../../services/time-counter.service';
 
 @Component({
     selector: 'app-home',
@@ -13,9 +15,12 @@ import { take } from 'rxjs/operators';
 export class HomePage implements OnInit {
 
     counters: Observable<Counter[]>;
+    timeCounters: Observable<TimeCounter[]>;
 
     constructor(
         private counterService: CounterService,
+        private timeCounterService: TimeCounterService,
+        private timeCountersService: CounterService,
         private loader: LoaderService,
     ) {
     }
@@ -24,7 +29,11 @@ export class HomePage implements OnInit {
         this.loader.showLoader('Chargement ...')
             .then(() => {
                 this.counters = this.counterService.fetchCounters$();
-                this.counters.pipe(take(1)).toPromise()
+                this.timeCounters = this.timeCounterService.fetchTimeCounters$();
+                forkJoin([
+                    this.counters.pipe(take(1)),
+                    this.timeCounters.pipe(take(1)),
+                ]).toPromise()
                     .then(() => this.loader.dismissLoader());
             });
     }

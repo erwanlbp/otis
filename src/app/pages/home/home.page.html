@@ -9,11 +9,36 @@
 
 <ion-content>
     <ion-grid>
+
+        <!--########-->
+        <!--COUNTERS-->
+        <!--########-->
+        <ion-row *ngIf="counters">
+            <ion-col>
+                <ion-title>Compteurs unitaires</ion-title>
+            </ion-col>
+        </ion-row>
         <ion-row *ngIf="counters">
             <ion-col>
                 <app-counter *ngFor="let counter of counters | async" [counter]="counter"></app-counter>
                 <app-add-counter></app-add-counter>
             </ion-col>
         </ion-row>
+
+        <!--#############-->
+        <!--TIME COUNTERS-->
+        <!--#############-->
+        <ion-row *ngIf="timeCounters">
+            <ion-col>
+                <ion-title>Compteurs temporels</ion-title>
+            </ion-col>
+        </ion-row>
+        <ion-row *ngIf="timeCounters">
+            <ion-col>
+                <app-time-counter *ngFor="let timeCounter of timeCounters | async" [timeCounter]="timeCounter"></app-time-counter>
+                <app-add-time-counter></app-add-time-counter>
+            </ion-col>
+        </ion-row>
+
     </ion-grid>
 </ion-content>

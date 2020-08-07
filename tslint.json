@@ -59,7 +59,12 @@
       "single",
       "avoid-escape"
     ],
-    "trailing-comma": false,
+    "trailing-comma": {
+      "options": {
+        "multiline": "always",
+        "singleline": "never"
+      }
+    },
     "no-output-on-prefix": true,
     "no-inputs-metadata-property": true,
     "no-host-metadata-property": true,

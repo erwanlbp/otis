@@ -1,10 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Counter } from '../../interfaces/counter';
-import { CounterService } from '../../services/counter.service';
-import { UtilsService } from '../../services/utils.service';
 import { EventService } from '../../services/event.service';
 import { LoaderService } from '../../services/loader.service';
-import { NavController, PopoverController } from '@ionic/angular';
+import { PopoverController } from '@ionic/angular';
 import { CounterMorePopoverComponent } from '../counter-more-popover/counter-more-popover.component';
 import { EventType } from '../../interfaces/event-type.type';
 import * as moment from 'moment';
@@ -15,11 +13,18 @@ import * as moment from 'moment';
     styleUrls: ['./counter.component.scss'],
 })
 export class CounterComponent implements OnInit {
+
     @Input() counter: Counter;
 
-    constructor(private navController: NavController, private counterService: CounterService, private eventService: EventService, private utilsService: UtilsService, private loaderService: LoaderService, private popoverController: PopoverController) {}
+    constructor(
+        private eventService: EventService,
+        private loaderService: LoaderService,
+        private popoverController: PopoverController,
+    ) {
+    }
 
-    ngOnInit() {}
+    ngOnInit() {
+    }
 
     decrement() {
         this.counter.value--;
