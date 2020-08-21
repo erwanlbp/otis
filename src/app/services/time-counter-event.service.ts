@@ -4,6 +4,8 @@ import { AngularFirestore, AngularFirestoreCollection, QueryFn } from '@angular/
 import { map, switchMap, take, tap } from 'rxjs/operators';
 import { AuthService } from './auth.service';
 import { TimeCounterEvent, toTimeCounterEvent, toTimeCounterEventDto } from '../interfaces/time-counter-event.interface';
+import * as moment from 'moment';
+import { UtilsService } from './utils.service';
 
 @Injectable({
     providedIn: 'root',
@@ -12,6 +14,7 @@ export class TimeCounterEventService {
     constructor(
         private firestore: AngularFirestore,
         private authService: AuthService,
+        private utilsService: UtilsService,
     ) {
     }
 
@@ -65,5 +68,50 @@ export class TimeCounterEventService {
             switchMap(collection => collection.snapshotChanges()),
             map(events => (!events ? [] : events.map(event => toTimeCounterEvent(event.payload.doc.id, event.payload.doc.data(), timeCounterName)))),
         );
+    }
+
+    assertValidStartDate(name: string, startDate: string): Promise<boolean> {
+        const momentDate = moment(startDate, 'DD/MM/YYYY HH:mm:ss', true);
+        if (!momentDate.isValid()) {
+            this.utilsService.showToast('Le format de date n\'est pas valide');
+            return Promise.resolve(false);
+        }
+        const startTimestamp: number = momentDate.toDate().getTime();
+        if (startTimestamp > moment().toDate().getTime()) {
+            this.utilsService.showToast('La date et l\'heure ne peuvent pas être dans le futur');
+            return Promise.resolve(false);
+        }
+        return this.fetchChunkTimeCounterEvents$(name, 1).pipe(take(1)).toPromise()
+            .then(chunk => {
+                const previousEndTimestamp = chunk.length === 1 ? chunk[0].endTimestamp : null;
+                if (previousEndTimestamp && startTimestamp <= previousEndTimestamp) {
+                    this.utilsService.showToast('Les événements ne doivent pas se superposer');
+                    return false;
+                }
+                return true;
+            })
+            .catch(err => {
+                console.error('failed fetching last time counter event ::', err);
+                this.utilsService.showToast('Une erreur est survenue');
+                return false;
+            });
+    }
+
+    assertValidEndDate(name: string, startTimestamp: number, endDate: string): boolean {
+        const momentDate = moment(endDate, 'DD/MM/YYYY HH:mm:ss', true);
+        if (!momentDate.isValid()) {
+            this.utilsService.showToast('Le format de date n\'est pas valide');
+            return false;
+        }
+        const endTimestamp: number = momentDate.toDate().getTime();
+        if (endTimestamp > moment().toDate().getTime()) {
+            this.utilsService.showToast('La date et l\'heure ne peuvent pas être dans le futur');
+            return false;
+        }
+        if (startTimestamp && endTimestamp <= startTimestamp) {
+            this.utilsService.showToast('La date/heure de fin doit être après la date/heure de début');
+            return false;
+        }
+        return true;
     }
 }

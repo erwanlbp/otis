@@ -3,6 +3,16 @@
 
         <ion-list-header>Actions</ion-list-header>
 
+        <ion-item (click)="startInPast()" *ngIf="!timeCounter.startTimestamp" button>
+            <ion-icon name="clock" slot="start"></ion-icon>
+            Démarrer dans le passé
+        </ion-item>
+
+        <ion-item (click)="stopInPast()" *ngIf="timeCounter.startTimestamp" button>
+            <ion-icon name="clock" slot="start"></ion-icon>
+            Arrêter dans le passé
+        </ion-item>
+
         <ion-item (click)="events()" button>
             <ion-icon name="medal" slot="start"></ion-icon>
             Evénements

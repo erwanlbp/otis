@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AlertController, ToastController } from '@ionic/angular';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class UtilsService {
 
@@ -21,19 +21,19 @@ export class UtilsService {
                         text: 'Annuler',
                         role: 'cancel',
                         cssClass: 'secondary',
-                        handler: () => resolve(false)
+                        handler: () => resolve(false),
                     },
                     {
                         text: 'Confirmer',
-                        handler: () => resolve(true)
-                    }
-                ]
+                        handler: () => resolve(true),
+                    },
+                ],
             }).then(alert => alert.present());
         });
     }
 
     async showToast(msg: string) {
-        const toast = await this.toastController.create({message: msg, duration: 4000});
+        const toast = await this.toastController.create({ message: msg, duration: 4000 });
         await toast.present();
     }
 }

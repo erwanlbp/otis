@@ -68,8 +68,8 @@ export class TimeCounterService {
         return this.userTimeCountersDocument$().pipe(switchMap(doc => doc.doc<TimeCounter>(name).valueChanges()));
     }
 
-    startCounter(name: string): Promise<void> {
-        const partialTimeCounter: Partial<TimeCounter> = { startTimestamp: new Date().getTime() };
+    startCounter(name: string, startDate?: number): Promise<void> {
+        const partialTimeCounter: Partial<TimeCounter> = { startTimestamp: startDate || new Date().getTime() };
         return this.userTimeCountersDocument$()
             .pipe(
                 take(1),
@@ -77,14 +77,14 @@ export class TimeCounterService {
             ).toPromise();
     }
 
-    stopCounter(name: string): Promise<void> {
+    stopCounter(name: string, endTimestamp?: number): Promise<void> {
         return this.fetchTimeCounter$(name).pipe(
             take(1),
             switchMap(doc => {
                 const event: TimeCounterEvent = {
                     timeCounterName: name,
                     startTimestamp: doc.startTimestamp,
-                    endTimestamp: new Date().getTime(),
+                    endTimestamp: endTimestamp || new Date().getTime(),
                 };
                 return this.timeCounterEventService.saveCounterEvent(event);
             }),
