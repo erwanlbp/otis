@@ -12,7 +12,9 @@
     <ion-list *ngIf="timeCounterEvents">
         <app-time-counter-event
                 *ngFor="let event of timeCounterEvents ; index as i; first as isLast"
-                [event]="event"></app-time-counter-event>
+                [event]="event"
+                [isLast]="isLast"
+        ></app-time-counter-event>
         <ion-button [hidden]="noMoreData || !timeCounterEvents.length" (click)="loadMore()" fill="clear">Afficher plus d'évenements</ion-button>
     </ion-list>
 </ion-content>

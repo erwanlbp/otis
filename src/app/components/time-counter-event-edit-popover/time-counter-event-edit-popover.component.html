@@ -1,0 +1,31 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>Modifier</ion-title>
+        <ion-icon (click)="close()" class="ion-margin clickable" color="dark" name="close" slot="end" title="Fermer"></ion-icon>
+    </ion-toolbar>
+</ion-header>
+<ion-content>
+
+    <form [formGroup]="form">
+        <ion-item>
+            <ion-label position="floating">Date/heure de début</ion-label>
+            <ion-input formControlName="startDate" placeholder="{{event.startTimestamp | date:'dd/MM/yyyy HH:mm:ss'}}" style=" width:200px; display: inline-block" value="{{event.startTimestamp | date:'dd/MM/yyyy HH:mm:ss'}}"></ion-input>
+            <ion-button class="cancel-button" (click)="cancelStartDate()" *ngIf="differentStartDate()" color="dark" fill="clear" slot="end" title="Annuler" type="button">
+                <ion-icon name="close"></ion-icon>
+            </ion-button>
+        </ion-item>
+
+        <ion-item>
+            <ion-label position="floating">Date/heure de fin</ion-label>
+            <ion-input formControlName="endDate" placeholder="{{event.endTimestamp | date:'dd/MM/yyyy HH:mm:ss'}}" style=" width:200px; display: inline-block" value="{{event.endTimestamp | date:'dd/MM/yyyy HH:mm:ss'}}"></ion-input>
+            <ion-button class="cancel-button" (click)="cancelEndDate()" *ngIf="differentEndDate()" color="dark" fill="clear" slot="end" title="Annuler" type="button">
+                <ion-icon name="close"></ion-icon>
+            </ion-button>
+        </ion-item>
+
+        <ion-button size="small" (click)="modifyEvent()" [disabled]="datesAreTheSameAsBefore()" color="dark" title="Sauvegarder" type="submit">
+            <ion-icon name="checkmark"></ion-icon>
+            Sauvegarder
+        </ion-button>
+    </form>
+</ion-content>

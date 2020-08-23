@@ -42,6 +42,18 @@ export class TimeCounterEventService {
             .toPromise();
     }
 
+    updateEventTimestamps(timeCounterName: string, eventId: string, newStartTimestamp: number, newEndTimestamp: number): Promise<void> {
+        const partialEvent: Partial<TimeCounterEvent> = {
+            startTimestamp: newStartTimestamp,
+            endTimestamp: newEndTimestamp,
+        };
+        return this.userTimeCounterEventsDocument$(timeCounterName)
+            .pipe(
+                take(1),
+                switchMap(doc => doc.doc(eventId).update(partialEvent)),
+            ).toPromise();
+    }
+
     deleteTimeCounterEvent(timeCounterName: string, id: string): Promise<void> {
         return this.userTimeCounterEventsDocument$(timeCounterName)
             .pipe(
@@ -70,7 +82,7 @@ export class TimeCounterEventService {
         );
     }
 
-    assertValidStartDate(name: string, startDate: string): Promise<boolean> {
+    assertValidStartDate(name: string, startDate: string, fromLastEvent: boolean = true): Promise<boolean> {
         const momentDate = moment(startDate, 'DD/MM/YYYY HH:mm:ss', true);
         if (!momentDate.isValid()) {
             this.utilsService.showToast('Le format de date n\'est pas valide');
@@ -81,11 +93,12 @@ export class TimeCounterEventService {
             this.utilsService.showToast('La date et l\'heure ne peuvent pas être dans le futur');
             return Promise.resolve(false);
         }
-        return this.fetchChunkTimeCounterEvents$(name, 1).pipe(take(1)).toPromise()
+        return this.fetchChunkTimeCounterEvents$(name, fromLastEvent ? 1 : 2).pipe(take(1)).toPromise()
             .then(chunk => {
-                const previousEndTimestamp = chunk.length === 1 ? chunk[0].endTimestamp : null;
+                const previousEndTimestamp = chunk.length === (fromLastEvent ? 1 : 2) ? chunk[fromLastEvent ? 0 : 1].endTimestamp : null;
                 if (previousEndTimestamp && startTimestamp <= previousEndTimestamp) {
-                    this.utilsService.showToast('Les événements ne doivent pas se superposer');
+                    this.utilsService.showToast('La date de début ne peut pas être avant la date de fin de l\'événement précédent');
+                    console.warn(`startTimestamp:${startTimestamp} > previousTimestamp:${previousEndTimestamp}`);
                     return false;
                 }
                 return true;

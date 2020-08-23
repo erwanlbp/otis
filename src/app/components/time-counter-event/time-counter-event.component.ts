@@ -3,6 +3,9 @@ import { UtilsService } from '../../services/utils.service';
 import * as moment from 'moment';
 import { TimeCounterEvent } from '../../interfaces/time-counter-event.interface';
 import { TimeCounterEventService } from '../../services/time-counter-event.service';
+import { PopoverController } from '@ionic/angular';
+import { TimeCounterEventEditPopoverComponent } from '../time-counter-event-edit-popover/time-counter-event-edit-popover.component';
+import { TimeCounterService } from '../../services/time-counter.service';
 
 interface TimeCounterEventWithDate extends TimeCounterEvent {
     duration: moment.Duration;
@@ -16,6 +19,7 @@ interface TimeCounterEventWithDate extends TimeCounterEvent {
 export class TimeCounterEventComponent implements OnInit {
 
     event: TimeCounterEventWithDate;
+    @Input() isLast: boolean = false;
     editMode = false;
 
     @Input('event') set timeCounterEvent(ev: TimeCounterEvent) {
@@ -28,6 +32,8 @@ export class TimeCounterEventComponent implements OnInit {
     constructor(
         private timeCounterEventService: TimeCounterEventService,
         private utilsService: UtilsService,
+        private popoverController: PopoverController,
+        private timeCounterService: TimeCounterService,
     ) {
     }
 
@@ -42,5 +48,21 @@ export class TimeCounterEventComponent implements OnInit {
                 }
                 return this.timeCounterEventService.deleteTimeCounterEvent(this.event.timeCounterName, this.event.id);
             });
+    }
+
+    async edit(event) {
+        if (!this.isLast) {
+            this.utilsService.showToast('Seul le dernier event est modifiable');
+            return;
+        }
+        if (await this.timeCounterService.isStarted(this.event.timeCounterName)) {
+            this.utilsService.showToast('L\'édition n\'est pas possible quand un événement de comptage est en cours');
+            return;
+        }
+        const popover = await this.popoverController.create({
+            component: TimeCounterEventEditPopoverComponent,
+            componentProps: { timeCounterEvent: this.event },
+        });
+        await popover.present();
     }
 }

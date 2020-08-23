@@ -7,6 +7,9 @@
 <!--        <ion-icon class="ion-margin-horizontal" name="arrow-forward"></ion-icon>-->
         <strong>{{event.duration | duration}}</strong>
     </ion-label>
+    <ion-button (click)="edit($event)" *ngIf="isLast" color="dark" fill="clear" slot="end" title="Modifier la date et l'heure" type="button">
+        <ion-icon name="create"></ion-icon>
+    </ion-button>
     <ion-button (click)="delete()" color="dark" fill="clear" slot="end" title="Supprimer l'événement" type="button">
         <ion-icon name="trash"></ion-icon>
     </ion-button>

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AlertController, ToastController } from '@ionic/angular';
+import * as moment from 'moment';
 
 @Injectable({
     providedIn: 'root',
@@ -10,6 +11,14 @@ export class UtilsService {
         private alertController: AlertController,
         private toastController: ToastController,
     ) {
+    }
+
+    static formatToDateTime(timestamp: number): string {
+        return moment(timestamp).format('DD/MM/YYYY HH:mm:ss');
+    }
+
+    static parseDateTimeToTimestamp(dateTime: string): number {
+        return moment(dateTime, 'DD/MM/YYYY HH:mm:ss').toDate().getTime();
     }
 
     async askForConfirmation(): Promise<boolean> {

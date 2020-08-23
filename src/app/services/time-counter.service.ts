@@ -91,4 +91,12 @@ export class TimeCounterService {
             switchMap(() => this.saveTimeCounter({ name })),
         ).toPromise();
     }
+
+    isStarted(timeCounterName: string): Promise<boolean> {
+        return this.fetchTimeCounter$(timeCounterName)
+            .pipe(
+                take(1),
+                map(counter => !!counter.startTimestamp),
+            ).toPromise();
+    }
 }
