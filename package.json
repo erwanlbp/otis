@@ -1,6 +1,6 @@
 {
   "name": "otis",
-  "version": "1.8.0",
+  "version": "1.9.0",
   "author": "Erwan Le Batard--Polès",
   "homepage": "https://ionicframework.com/",
   "scripts": {
@@ -16,6 +16,7 @@
   },
   "private": true,
   "dependencies": {
+    "@angular/cdk": "^8.1.2",
     "@angular/common": "~8.1.2",
     "@angular/core": "~8.1.2",
     "@angular/fire": "^5.2.3",

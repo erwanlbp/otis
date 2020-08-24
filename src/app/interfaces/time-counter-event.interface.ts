@@ -1,3 +1,5 @@
+import * as moment from 'moment';
+
 export interface TimeCounterEvent {
     id?: string;
     timeCounterName: string;
@@ -29,5 +31,15 @@ export function toTimeCounterEventDto(event: TimeCounterEvent): TimeCounterEvent
     return {
         startTimestamp: event.startTimestamp,
         endTimestamp: event.endTimestamp,
+    };
+}
+
+export function generateRandomTimeCounterEvent(timeCounterName: string, startDate: moment.Moment, durationSeconds: number): TimeCounterEvent {
+    const startTimestamp = startDate.toDate().getTime();
+    return {
+        timeCounterName,
+        startTimestamp,
+        endTimestamp: startDate.add(durationSeconds, 'seconds').toDate().getTime(),
+        id: String(startTimestamp),
     };
 }

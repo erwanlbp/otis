@@ -10,6 +10,16 @@ export class DurationPipe implements PipeTransform {
         if (!duration) {
             return '--';
         }
-        return duration.humanize(false);
+        let res = '';
+        if (duration.days() > 0) {
+            res += duration.days() + 'j';
+        }
+        if (duration.hours() > 0) {
+            res += duration.hours() + 'h';
+        }
+        if (duration.minutes() > 0) {
+            res += duration.minutes() + 'min';
+        }
+        return res;
     }
 }

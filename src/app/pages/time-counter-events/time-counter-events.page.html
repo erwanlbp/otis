@@ -3,7 +3,7 @@
         <ion-buttons slot="start">
             <ion-menu-button *ngIf="!backButton"></ion-menu-button>
         </ion-buttons>
-        <ion-title>Evénements du compteur {{timeCounterName}}</ion-title>
+        <ion-title><span class="hide-on-small-device">Evénements du compteur </span>{{timeCounterName}}</ion-title>
         <ion-back-button #backButton slot="start" defaultHref="/"></ion-back-button>
     </ion-toolbar>
 </ion-header>

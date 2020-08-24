@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { UtilsService } from '../../services/utils.service';
 import * as moment from 'moment';
 import { TimeCounterEvent } from '../../interfaces/time-counter-event.interface';
@@ -6,6 +6,9 @@ import { TimeCounterEventService } from '../../services/time-counter-event.servi
 import { PopoverController } from '@ionic/angular';
 import { TimeCounterEventEditPopoverComponent } from '../time-counter-event-edit-popover/time-counter-event-edit-popover.component';
 import { TimeCounterService } from '../../services/time-counter.service';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 interface TimeCounterEventWithDate extends TimeCounterEvent {
     duration: moment.Duration;
@@ -16,11 +19,12 @@ interface TimeCounterEventWithDate extends TimeCounterEvent {
     templateUrl: './time-counter-event.component.html',
     styleUrls: ['./time-counter-event.component.scss'],
 })
-export class TimeCounterEventComponent implements OnInit {
+export class TimeCounterEventComponent implements OnInit, OnDestroy {
 
     event: TimeCounterEventWithDate;
     @Input() isLast: boolean = false;
-    editMode = false;
+    disableSlide: boolean = true;
+    private destroyed$: Subject<void> = new Subject();
 
     @Input('event') set timeCounterEvent(ev: TimeCounterEvent) {
         this.event = {
@@ -34,10 +38,14 @@ export class TimeCounterEventComponent implements OnInit {
         private utilsService: UtilsService,
         private popoverController: PopoverController,
         private timeCounterService: TimeCounterService,
+        private breakpointObserver: BreakpointObserver,
     ) {
     }
 
     ngOnInit() {
+        this.breakpointObserver.observe([Breakpoints.HandsetPortrait])
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe(state => this.disableSlide = !state.matches);
     }
 
     delete() {
@@ -64,5 +72,10 @@ export class TimeCounterEventComponent implements OnInit {
             componentProps: { timeCounterEvent: this.event },
         });
         await popover.present();
+    }
+
+    ngOnDestroy(): void {
+        this.destroyed$.next();
+        this.destroyed$.unsubscribe();
     }
 }

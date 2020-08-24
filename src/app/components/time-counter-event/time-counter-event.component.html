@@ -1,16 +1,26 @@
-<ion-item>
-    <ion-icon name="hourglass" slot="start"></ion-icon>
-    <ion-label>
-<!--        <span>{{event.startTimestamp | date:'dd/MM/yyyy HH:mm:ss' }}</span>-->
-<!--        <ion-icon class="ion-margin-horizontal" name="arrow-forward"></ion-icon>-->
-<!--        <span>{{event.endTimestamp | date:'dd/MM/yyyy HH:mm:ss' }}</span>-->
-<!--        <ion-icon class="ion-margin-horizontal" name="arrow-forward"></ion-icon>-->
-        <strong>{{event.duration | duration}}</strong>
-    </ion-label>
-    <ion-button (click)="edit($event)" *ngIf="isLast" color="dark" fill="clear" slot="end" title="Modifier la date et l'heure" type="button">
-        <ion-icon name="create"></ion-icon>
-    </ion-button>
-    <ion-button (click)="delete()" color="dark" fill="clear" slot="end" title="Supprimer l'événement" type="button">
-        <ion-icon name="trash"></ion-icon>
-    </ion-button>
-</ion-item>
+<ion-item-sliding [disabled]="disableSlide">
+
+    <ion-item>
+        <ion-icon class="hide-on-small-device" name="hourglass" slot="start"></ion-icon>
+        <ion-label>
+            <span>{{event.startTimestamp | date:'dd/MM/yyyy HH:mm:ss' }}</span>
+            <ion-icon class="ion-margin-horizontal" name="arrow-forward"></ion-icon>
+            <br class="show-on-small-device"/>
+            <span>{{event.endTimestamp | date:'dd/MM/yyyy HH:mm:ss' }}</span>
+            <ion-icon class="ion-margin-horizontal" name="arrow-forward"></ion-icon>
+            <strong>{{event.duration | duration}}</strong>
+        </ion-label>
+        <ion-button class="hide-on-small-device" (click)="edit($event)" *ngIf="isLast" color="dark" fill="clear" slot="end" title="Modifier la date et l'heure" type="button">
+            <ion-icon name="create"></ion-icon>
+        </ion-button>
+        <ion-button class="hide-on-small-device" (click)="delete()" color="dark" fill="clear" slot="end" title="Supprimer l'événement" type="button">
+            <ion-icon name="trash"></ion-icon>
+        </ion-button>
+    </ion-item>
+
+    <ion-item-options>
+        <ion-item-option color="danger" (click)="delete()">Supprimer</ion-item-option>
+        <ion-item-option *ngIf="isLast" (click)="edit($event)">Modifier</ion-item-option>
+    </ion-item-options>
+
+</ion-item-sliding>

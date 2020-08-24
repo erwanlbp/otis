@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { AngularFirestore, AngularFirestoreCollection, QueryFn } from '@angular/fire/firestore';
 import { map, switchMap, take, tap } from 'rxjs/operators';
 import { AuthService } from './auth.service';
-import { TimeCounterEvent, toTimeCounterEvent, toTimeCounterEventDto } from '../interfaces/time-counter-event.interface';
+import { generateRandomTimeCounterEvent, TimeCounterEvent, toTimeCounterEvent, toTimeCounterEventDto } from '../interfaces/time-counter-event.interface';
 import * as moment from 'moment';
 import { UtilsService } from './utils.service';
 
@@ -70,6 +70,10 @@ export class TimeCounterEventService {
     }
 
     fetchChunkTimeCounterEvents$(timeCounterName: string, chunkSize: number, lastEventStartTs: number = null): Observable<TimeCounterEvent[]> {
+        // return of([
+        //     generateRandomTimeCounterEvent('test', moment().subtract(10, 'hours'), 300),
+        //     generateRandomTimeCounterEvent('test', moment().subtract(9, 'hours'), 6000),
+        // ]);
         return this.userTimeCounterEventsDocument$(timeCounterName, ref => {
             let newRef = ref.orderBy('startTimestamp', 'desc');
             if (lastEventStartTs != null) {

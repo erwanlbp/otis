@@ -31,3 +31,23 @@
 .clickable {
   cursor: pointer;
 }
+
+@media (min-width: 576px) {
+  .hide-on-small-device {
+    display: initial;
+  }
+
+  .show-on-small-device {
+    display: none;
+  }
+}
+
+@media (max-width: 576px) {
+  .hide-on-small-device {
+    display: none;
+  }
+
+  .show-on-small-device {
+    display: initial;
+  }
+}
