@@ -12,6 +12,6 @@ export class TimeElapsedPipe implements PipeTransform {
         if (!value) {
             return of('--').pipe(take(1));
         }
-        return interval(1000).pipe(map(() => moment(value).fromNow()));
+        return interval(5000).pipe(map(() => moment.duration(new Date().getTime() - value).format()));
     }
 }

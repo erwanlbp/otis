@@ -1,10 +1,10 @@
-<ion-item-sliding [disabled]="disableSlide">
+<ion-item-sliding [disabled]="desktop">
 
     <ion-item>
         <ion-icon class="hide-on-small-device" name="hourglass" slot="start"></ion-icon>
         <ion-label>
             <span>{{event.startTimestamp | date:'dd/MM/yyyy HH:mm:ss' }}</span>
-            <ion-icon class="ion-margin-horizontal" name="arrow-forward"></ion-icon>
+            <ion-icon class="ion-margin-horizontal" *ngIf="desktop" name="arrow-forward"></ion-icon>
             <br class="show-on-small-device"/>
             <span>{{event.endTimestamp | date:'dd/MM/yyyy HH:mm:ss' }}</span>
             <ion-icon class="ion-margin-horizontal" name="arrow-forward"></ion-icon>

@@ -23,7 +23,7 @@ export class TimeCounterEventComponent implements OnInit, OnDestroy {
 
     event: TimeCounterEventWithDate;
     @Input() isLast: boolean = false;
-    disableSlide: boolean = true;
+    desktop: boolean = true;
     private destroyed$: Subject<void> = new Subject();
 
     @Input('event') set timeCounterEvent(ev: TimeCounterEvent) {
@@ -45,7 +45,7 @@ export class TimeCounterEventComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.breakpointObserver.observe([Breakpoints.HandsetPortrait])
             .pipe(takeUntil(this.destroyed$))
-            .subscribe(state => this.disableSlide = !state.matches);
+            .subscribe(state => this.desktop = !state.matches);
     }
 
     delete() {
