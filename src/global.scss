@@ -32,6 +32,15 @@
   cursor: pointer;
 }
 
+.margin-vertical-auto {
+  margin-bottom: auto;
+  margin-top: auto;
+}
+
+.no-padding-bottom {
+  padding-bottom: 0;
+}
+
 @media (min-width: 576px) {
   .hide-on-small-device {
     display: initial;
