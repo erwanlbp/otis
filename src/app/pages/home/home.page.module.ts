@@ -5,9 +5,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HomePage } from './home.page';
 import { CounterComponentModule } from '../../components/counter/counter.component.module';
-import { AddCounterComponentModule } from '../../components/add-button/add-counter/add-counter.component.module';
+import { AddCounterComponentModule } from '../../components/add-counter-button/add-counter.component.module';
 import { TimeCounterComponentModule } from '../../components/time-counter/time-counter.component.module';
-import { AddTimeCounterComponentModule } from '../../components/add-button/add-time-counter/add-time-counter.component.module';
 
 @NgModule({
     imports: [
@@ -18,9 +17,8 @@ import { AddTimeCounterComponentModule } from '../../components/add-button/add-t
         CounterComponentModule,
         AddCounterComponentModule,
         TimeCounterComponentModule,
-        AddTimeCounterComponentModule,
     ],
-    declarations: [HomePage]
+    declarations: [HomePage],
 })
 export class HomePageModule {
 }

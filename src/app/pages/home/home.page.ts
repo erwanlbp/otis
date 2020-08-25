@@ -1,11 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { Counter } from '../../interfaces/counter';
 import { CounterService } from '../../services/counter.service';
-import { forkJoin, Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { LoaderService } from '../../services/loader.service';
-import { take } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 import { TimeCounter } from '../../interfaces/time-counter.interface';
 import { TimeCounterService } from '../../services/time-counter.service';
+
+interface GenericCounter {
+    type: 'counter' | 'timeCounter';
+    counter: Counter | TimeCounter;
+}
 
 @Component({
     selector: 'app-home',
@@ -14,8 +19,7 @@ import { TimeCounterService } from '../../services/time-counter.service';
 })
 export class HomePage implements OnInit {
 
-    counters: Observable<Counter[]>;
-    timeCounters: Observable<TimeCounter[]>;
+    allCounters: Observable<GenericCounter[]>;
 
     constructor(
         private counterService: CounterService,
@@ -25,16 +29,19 @@ export class HomePage implements OnInit {
     ) {
     }
 
-    ngOnInit(): void {
-        this.loader.showLoader('Chargement ...')
-            .then(() => {
-                this.counters = this.counterService.fetchCounters$();
-                this.timeCounters = this.timeCounterService.fetchTimeCounters$();
-                forkJoin([
-                    this.counters.pipe(take(1)),
-                    this.timeCounters.pipe(take(1)),
-                ]).toPromise()
-                    .then(() => this.loader.dismissLoader());
-            });
+    async ngOnInit() {
+        await this.loader.showLoader('Chargement ...');
+
+        this.allCounters = combineLatest([this.counterService.fetchCounters$(), this.timeCounterService.fetchTimeCounters$()])
+            .pipe(
+                map(([counters, timeCounters]) => {
+                    const genericCounters: GenericCounter[] = [];
+                    counters.forEach(counter => genericCounters.push({ type: 'counter', counter }));
+                    timeCounters.forEach(counter => genericCounters.push({ type: 'timeCounter', counter }));
+                    return genericCounters.sort((a, b) => a.counter.name.localeCompare(b.counter.name));
+                }),
+            );
+        await this.allCounters.pipe(take(1)).toPromise();
+        await this.loader.dismissLoader();
     }
 }
