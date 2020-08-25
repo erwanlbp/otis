@@ -1,6 +1,6 @@
 {
   "name": "otis",
-  "version": "1.9.0",
+  "version": "1.10.0",
   "author": "Erwan Le Batard--Polès",
   "homepage": "https://ionicframework.com/",
   "scripts": {
@@ -9,7 +9,7 @@
     "start": "ng serve",
     "build": "npm run clean && ionic build",
     "build:prod": "npm run clean && ionic build --prod --release --engine browser ",
-    "deploy": "npm run build:prod && firebase deploy --only hosting",
+    "deploy": "npm run build:prod && npm prune --production && firebase deploy --only hosting && npm ci",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
