@@ -13,6 +13,11 @@
             Arrêter dans le passé
         </ion-item>
 
+        <ion-item (click)="cancel()" *ngIf="timeCounter.startTimestamp" button>
+            <ion-icon name="close-circle" slot="start"></ion-icon>
+            Annuler l'événement
+        </ion-item>
+
         <ion-item (click)="events()" button>
             <ion-icon name="medal" slot="start"></ion-icon>
             Evénements

@@ -30,19 +30,17 @@ export class TimeCounterMorePopoverComponent implements OnInit {
         this.timeCounter = this.navParams.get('timeCounter');
     }
 
-    close() {
-        this.popoverController.dismiss();
+    async close() {
+        await this.popoverController.dismiss();
     }
 
-    delete() {
-        this.utilsService.askForConfirmation()
-            .then(confirmed => {
-                if (!confirmed) {
-                    return;
-                }
-                this.timeCounterService.deleteTimeCounter(this.timeCounter);
-            })
-            .then(() => this.close());
+    async delete() {
+        this.close();
+        const confirmed = await this.utilsService.askForConfirmation();
+        if (!confirmed) {
+            return;
+        }
+        await this.timeCounterService.deleteTimeCounter(this.timeCounter);
     }
 
     events() {
@@ -140,5 +138,18 @@ export class TimeCounterMorePopoverComponent implements OnInit {
             });
         await alert.present();
         this.close();
+    }
+
+    async cancel() {
+        if (!this.timeCounter.startTimestamp) {
+            this.utilsService.showToast('Le compteur n\'est pas démarré');
+            return;
+        }
+        this.close();
+        const confirmed = await this.utilsService.askForConfirmation();
+        if (!confirmed) {
+            return;
+        }
+        await this.timeCounterService.saveTimeCounter({ name: this.timeCounter.name });
     }
 }

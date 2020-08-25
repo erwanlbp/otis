@@ -34,15 +34,13 @@ export class CounterMorePopoverComponent implements OnInit {
         this.popoverController.dismiss();
     }
 
-    delete() {
-        this.utilsService.askForConfirmation()
-            .then(confirmed => {
-                if (!confirmed) {
-                    return;
-                }
-                this.counterService.deleteCounter(this.counter);
-            })
-            .then(() => this.close());
+    async delete() {
+        this.close();
+        const confirmed = await this.utilsService.askForConfirmation();
+        if (!confirmed) {
+            return;
+        }
+        await this.counterService.deleteCounter(this.counter);
     }
 
     events() {
@@ -56,6 +54,7 @@ export class CounterMorePopoverComponent implements OnInit {
     }
 
     async addInPast() {
+        this.close();
         const alert = await this.alertController.create({
             header: 'Quelle est la date et/ou l\'heure de l\'événement',
             inputs: [{
@@ -100,6 +99,5 @@ export class CounterMorePopoverComponent implements OnInit {
                     });
             });
         await alert.present();
-        this.close();
     }
 }
