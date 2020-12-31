@@ -11,13 +11,20 @@ export function getEventTypeIcon(type: EventType): string {
     }
 }
 
-export function getEventTypeValue(type: EventType): number {
+export function getEventTypeValue(type: EventType, value?: number): number {
     switch (type) {
         case 'increment':
-            return 1;
+            return value || 1;
         case 'decrement':
-            return -1;
+            return value || -1;
         default:
             return 0;
     }
+}
+
+/**
+ * @param value must be != 0
+ */
+export function getEventType(value: number): EventType {
+    return value > 0 ? 'increment' : 'decrement';
 }

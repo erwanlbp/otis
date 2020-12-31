@@ -3,9 +3,14 @@
 
         <ion-list-header>Actions</ion-list-header>
 
+        <ion-item (click)="addMoreThanOne()" button>
+            <ion-icon name="add-circle" slot="start"></ion-icon>
+            (In/Dé)crémenter de n
+        </ion-item>
+
         <ion-item (click)="addInPast()" button>
             <ion-icon name="clock" slot="start"></ion-icon>
-            Ajouter dans le passé
+            Incrémenter dans le passé
         </ion-item>
 
         <ion-item (click)="events()" button>

@@ -1,0 +1,6 @@
+*.min.js
+index.html
+node_modules/
+www/
+.sourcemaps/
+*.js

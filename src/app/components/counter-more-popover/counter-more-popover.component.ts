@@ -5,6 +5,7 @@ import { CounterService } from '../../services/counter.service';
 import { Counter } from '../../interfaces/counter';
 import * as moment from 'moment';
 import { EventService } from '../../services/event.service';
+import { EventType, getEventType } from '../../interfaces/event-type.type';
 
 @Component({
     selector: 'app-counter-more-popover',
@@ -12,7 +13,6 @@ import { EventService } from '../../services/event.service';
     styleUrls: ['./counter-more-popover.component.scss'],
 })
 export class CounterMorePopoverComponent implements OnInit {
-
     private counter: Counter;
 
     constructor(
@@ -100,4 +100,55 @@ export class CounterMorePopoverComponent implements OnInit {
             });
         await alert.present();
     }
+
+  async addMoreThanOne() {
+    this.close();
+    const alert = await this.alertController.create({
+      header: 'Incrémenter le compteur de combien ?',
+      message: 'Entrer un nombre négatif pour décrementer',
+      inputs: [
+        {
+          type: 'number',
+          value: 1,
+          name: 'value',
+        },
+      ],
+      buttons: [
+        {
+          text: 'Annuler',
+          role: 'cancel',
+          cssClass: 'secondary',
+        },
+        {
+          text: 'Confirmer',
+          role: 'confirm',
+        },
+      ],
+    });
+    alert
+        .onDidDismiss()
+        .then(data => {
+          if (data.role !== 'confirm') {
+            return;
+          }
+          const value: number = data.data.values.value ? Number(data.data.values.value) : null;
+          if (!value || value === 0) {
+            this.utilsService.showToast('0 n\'est pas autorisé');
+            return;
+          }
+          const eventType: EventType = getEventType(value);
+          return this.eventService.saveCounterEventAndSideEffects({
+            counterName: this.counter.name,
+            timestamp: moment().toDate().getTime(),
+            type: eventType,
+            value,
+            newValue: this.counter.value + value,
+          });
+        })
+        .catch(err => {
+          console.error('failed incrementing/decrementing counter more than one ::', err);
+          this.utilsService.showToast('Echec lors de la sauvegarde');
+        });
+    await alert.present();
+  }
 }

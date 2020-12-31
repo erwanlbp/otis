@@ -1,0 +1,26 @@
+{
+  "singleQuote": true,
+  "tabWidth": 2,
+  "semi": true,
+  "printWidth": 140,
+  "bracketSpacing": true,
+  "arrowParens": "avoid",
+  "trailingComma": "all",
+  "quoteProps": "consistent",
+  "overrides": [
+    {
+      "files": ["*.html"],
+      "options": {
+        "parser": "angular",
+        "printWidth": 140,
+        "htmlWhitespaceSensitivity": "ignore"
+      }
+    },
+    {
+      "files": ["*.module.ts"],
+      "options": {
+        "printWidth": 60
+      }
+    }
+  ]
+}

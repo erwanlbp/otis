@@ -22,7 +22,7 @@ export const onCreate = functions
                     return saveNewMonthlyAgg(monthlyAggregatePath, eventMonth, eventSaved);
                 }
                 const existingAggregate = monthlyAggregate.data() as CounterMonthlyEventsAggregation;
-                const updatedAggregation: Partial<CounterMonthlyEventsAggregation> = { totalCount: existingAggregate.totalCount + getEventTypeValue(eventSaved.type) };
+                const updatedAggregation: Partial<CounterMonthlyEventsAggregation> = { totalCount: existingAggregate.totalCount + getEventTypeValue(eventSaved.type, eventSaved.value) };
                 return admin.firestore().doc(monthlyAggregatePath).update(updatedAggregation);
             })
             .catch(err => console.error(err));
@@ -43,7 +43,7 @@ export const onDelete = functions
             .get()
             .then(monthlyAggregate => {
                 const existingAggregate = monthlyAggregate.data() as CounterMonthlyEventsAggregation;
-                const updatedAggregation: Partial<CounterMonthlyEventsAggregation> = { totalCount: existingAggregate.totalCount - getEventTypeValue(eventSaved.type) };
+                const updatedAggregation: Partial<CounterMonthlyEventsAggregation> = { totalCount: existingAggregate.totalCount - getEventTypeValue(eventSaved.type, eventSaved.value) };
                 return admin.firestore().doc(monthlyAggregatePath).update(updatedAggregation);
             })
             .catch(err => console.error(err));
@@ -75,7 +75,7 @@ export const onUpdate = functions
             .get()
             .then(monthlyAggregate => {
                 const existingAggregate = monthlyAggregate.data() as CounterMonthlyEventsAggregation;
-                const updatedAggregation: Partial<CounterMonthlyEventsAggregation> = { totalCount: existingAggregate.totalCount - getEventTypeValue(before.type) };
+                const updatedAggregation: Partial<CounterMonthlyEventsAggregation> = { totalCount: existingAggregate.totalCount - getEventTypeValue(before.type, before.value) };
                 return admin.firestore().doc(beforeMonthlyAggregatePath).update(updatedAggregation);
             });
 
@@ -89,7 +89,7 @@ export const onUpdate = functions
                     return saveNewMonthlyAgg(afterMonthlyAggregatePath, afterMonth, after);
                 }
                 const existingAggregate = monthlyAggregate.data() as CounterMonthlyEventsAggregation;
-                const updatedAggregation: Partial<CounterMonthlyEventsAggregation> = { totalCount: existingAggregate.totalCount + getEventTypeValue(after.type) };
+                const updatedAggregation: Partial<CounterMonthlyEventsAggregation> = { totalCount: existingAggregate.totalCount + getEventTypeValue(after.type, after.value) };
                 return admin.firestore().doc(afterMonthlyAggregatePath).update(updatedAggregation);
             });
 
