@@ -53,15 +53,27 @@ export class CounterMorePopoverComponent implements OnInit {
             .then(() => this.close());
     }
 
-    async addInPast() {
+    async addMoreThanOne() {
         this.close();
         const alert = await this.alertController.create({
-            header: 'Quelle est la date et/ou l\'heure de l\'événement',
-            inputs: [{
-                type: 'text',
-                value: moment().format('DD/MM/YYYY HH:mm:ss'),
-                name: 'eventDate',
-            }],
+            header: 'Quelle date et valeur d\'incrémentation ?',
+            message: 'Entrer la date et la valeur d\'incrémentation (entrer un nombre négatif pour décrementer)',
+            inputs: [
+                {
+                    label: 'Date',
+                    type: 'text',
+                    value: moment().format('DD/MM/YYYY HH:mm:ss'),
+                    name: 'eventDate',
+                    placeholder: 'Date (DD/MM/YYYY HH:mm:ss)',
+                },
+                {
+                    label: 'Pas',
+                    type: 'number',
+                    value: 1,
+                    name: 'value',
+                    placeholder: 'Pas d\'incrémentation',
+                },
+            ],
             buttons: [
                 {
                     text: 'Annuler',
@@ -74,11 +86,18 @@ export class CounterMorePopoverComponent implements OnInit {
                 },
             ],
         });
-        alert.onDidDismiss()
+        alert
+            .onDidDismiss()
             .then(data => {
                 if (data.role !== 'confirm') {
                     return;
                 }
+                const value: number = data.data.values.value ? Number(data.data.values.value) : null;
+                if (!value || value === 0) {
+                    this.utilsService.showToast('0 n\'est pas autorisé');
+                    return;
+                }
+                const eventType: EventType = getEventType(value);
                 const eventDate: string = data.data.values.eventDate;
                 return this.eventService.assertValidEventDate(this.counter.name, eventDate)
                     .then(valid => {
@@ -89,66 +108,17 @@ export class CounterMorePopoverComponent implements OnInit {
                         return this.eventService.saveCounterEventAndSideEffects({
                             counterName: this.counter.name,
                             timestamp: moment(eventDate, 'DD/MM/YYYY HH:mm:ss', true).toDate().getTime(),
-                            type: 'increment',
-                            newValue: this.counter.value + 1,
+                            type: eventType,
+                            value,
+                            newValue: this.counter.value + value,
                         });
                     })
                     .catch(err => {
-                        console.error('failed incrementing counter in past ::', err);
+                        console.error('failed incrementing/decrementing counter ::', err);
                         this.utilsService.showToast('Echec lors de la sauvegarde');
                     });
             });
+
         await alert.present();
     }
-
-  async addMoreThanOne() {
-    this.close();
-    const alert = await this.alertController.create({
-      header: 'Incrémenter le compteur de combien ?',
-      message: 'Entrer un nombre négatif pour décrementer',
-      inputs: [
-        {
-          type: 'number',
-          value: 1,
-          name: 'value',
-        },
-      ],
-      buttons: [
-        {
-          text: 'Annuler',
-          role: 'cancel',
-          cssClass: 'secondary',
-        },
-        {
-          text: 'Confirmer',
-          role: 'confirm',
-        },
-      ],
-    });
-    alert
-        .onDidDismiss()
-        .then(data => {
-          if (data.role !== 'confirm') {
-            return;
-          }
-          const value: number = data.data.values.value ? Number(data.data.values.value) : null;
-          if (!value || value === 0) {
-            this.utilsService.showToast('0 n\'est pas autorisé');
-            return;
-          }
-          const eventType: EventType = getEventType(value);
-          return this.eventService.saveCounterEventAndSideEffects({
-            counterName: this.counter.name,
-            timestamp: moment().toDate().getTime(),
-            type: eventType,
-            value,
-            newValue: this.counter.value + value,
-          });
-        })
-        .catch(err => {
-          console.error('failed incrementing/decrementing counter more than one ::', err);
-          this.utilsService.showToast('Echec lors de la sauvegarde');
-        });
-    await alert.present();
-  }
 }

@@ -66,7 +66,7 @@ export class CounterEventComponent implements OnInit {
 
     modifyEvent(newEventDate: string) {
         return this.loaderService.showLoader('Validation de la date ...')
-            .then(() => this.eventService.assertValidEventDate(this.event.counterName, newEventDate))
+            .then(() => this.eventService.assertValidEventDate(this.event.counterName, newEventDate, true))
             .then(async isValid => {
                 if (!isValid) {
                     console.error('event date is not valid, nothing to do');

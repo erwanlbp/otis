@@ -73,7 +73,7 @@ export class EventService {
         );
     }
 
-    assertValidEventDate(counterName: string, date: string): Promise<boolean> {
+    assertValidEventDate(counterName: string, date: string, fromPreviousLastEvent: boolean = false): Promise<boolean> {
         const momentDate = moment(date, 'DD/MM/YYYY HH:mm:ss', true);
         if (!momentDate.isValid()) {
             this.utilsService.showToast('Le format de date n\'est pas valide');
@@ -84,9 +84,14 @@ export class EventService {
             this.utilsService.showToast('La date et l\'heure ne peuvent pas être dans le futur');
             return Promise.resolve(false);
         }
-        return this.fetchChunkCounterEvents$(counterName, 2).pipe(take(1)).toPromise()
+        return this.fetchChunkCounterEvents$(counterName, fromPreviousLastEvent ? 2 : 1).pipe(take(1)).toPromise()
             .then(chunk => {
-                const previousTimestamp = chunk.length === 2 ? chunk[1].timestamp : null;
+                let previousTimestamp;
+                if (fromPreviousLastEvent) {
+                    previousTimestamp = chunk.length === 2 ? chunk[1].timestamp : null;
+                } else {
+                    previousTimestamp = chunk.length === 1 ? chunk[0].timestamp : null;
+                }
                 if (previousTimestamp && newTimestamp <= previousTimestamp) {
                     this.utilsService.showToast('L\'événement doit rester le dernier de la liste');
                     return false;
