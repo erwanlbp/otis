@@ -34,7 +34,7 @@ export class EventService {
     }
 
     /**
-     * eventId is used only for updating, it's the primary key of the event
+     * @param eventId is used only for updating, it's the primary key of the event
      */
     saveCounterEventAndSideEffects(event: CounterEvent, eventId?: string): Promise<void> {
         return this.saveCounterEvent(event, eventId)

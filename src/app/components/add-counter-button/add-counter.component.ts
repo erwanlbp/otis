@@ -86,7 +86,7 @@ export class AddCounterComponent implements OnInit, OnDestroy {
                         },
                         {
                             text: 'Confirmer',
-                            handler: data => resolve({ name: data.name, value: Number(data.value), lastEventTs: null }),
+                            handler: data => resolve({ name: data.name, value: Number(data.value), lastEventTs: null, areAtomicButtonsActive: true }),
                         },
                     ],
                 })

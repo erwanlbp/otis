@@ -21,10 +21,11 @@ export class UtilsService {
         return moment(dateTime, 'DD/MM/YYYY HH:mm:ss').toDate().getTime();
     }
 
-    async askForConfirmation(): Promise<boolean> {
+    async askForConfirmation(message?: string, header: string = 'Êtes vous sûr ?'): Promise<boolean> {
         return new Promise((resolve, reject) => {
             this.alertController.create({
-                header: 'Etes vous sur ?',
+                header,
+                message,
                 buttons: [
                     {
                         text: 'Annuler',

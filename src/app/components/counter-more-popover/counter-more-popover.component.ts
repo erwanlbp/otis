@@ -13,7 +13,7 @@ import { EventType, getEventType } from '../../interfaces/event-type.type';
     styleUrls: ['./counter-more-popover.component.scss'],
 })
 export class CounterMorePopoverComponent implements OnInit {
-    private counter: Counter;
+    counter: Counter;
 
     constructor(
         private navParams: NavParams,
@@ -120,5 +120,25 @@ export class CounterMorePopoverComponent implements OnInit {
             });
 
         await alert.present();
+    }
+
+    async switchAtomicActionsActive() {
+        this.close();
+        const confirmed = await this.utilsService.askForConfirmation(`Ceci ${this.counter.areAtomicButtonsActive ? 'désactivera' : 'activera'} les boutons +/- de ce compteur sur la liste des compteurs`, null);
+        if (!confirmed) {
+            return;
+        }
+        const tempCounter: Counter = {
+            ...this.counter,
+            areAtomicButtonsActive: !this.counter.areAtomicButtonsActive,
+        };
+        this.counterService.saveCounter(tempCounter)
+            .then(() => {
+                this.counter.areAtomicButtonsActive = tempCounter.areAtomicButtonsActive;
+            })
+            .catch(err => {
+                console.error('failed switching counter areAtomicButtonsActive ::', err);
+                this.utilsService.showToast('Echec de la sauvegarde');
+            });
     }
 }

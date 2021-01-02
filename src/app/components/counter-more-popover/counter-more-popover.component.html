@@ -18,6 +18,11 @@
             Graphique
         </ion-item>
 
+        <ion-item (click)="switchAtomicActionsActive()" button>
+            <ion-icon name="build" slot="start"></ion-icon>
+            {{counter.areAtomicButtonsActive ? 'Désactiver' : 'Activer'}} les boutons +/-
+        </ion-item>
+
         <ion-item (click)="delete()" button>
             <ion-icon name="trash" slot="start"></ion-icon>
             Supprimer
