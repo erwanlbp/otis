@@ -70,12 +70,6 @@ export class AddCounterComponent implements OnInit, OnDestroy {
                             type: 'text',
                             name: 'name',
                         },
-                        {
-                            placeholder: 'Valeur de départ',
-                            type: 'number',
-                            name: 'value',
-                            value: 0,
-                        },
                     ],
                     buttons: [
                         {
@@ -86,7 +80,7 @@ export class AddCounterComponent implements OnInit, OnDestroy {
                         },
                         {
                             text: 'Confirmer',
-                            handler: data => resolve({ name: data.name, value: Number(data.value), lastEventTs: null, areAtomicButtonsActive: true }),
+                            handler: data => resolve({ name: data.name, value: 0, lastEventTs: null, areAtomicButtonsActive: true }),
                         },
                     ],
                 })
