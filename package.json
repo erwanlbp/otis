@@ -5,7 +5,8 @@
   "homepage": "https://ionicframework.com/",
   "scripts": {
     "clean": "rimraf ./dist",
-    "prettier": "prettier -w .",
+    "prettier": "prettier --write $(git ls-files -m | xargs)",
+    "prettier:all": "prettier -w .",
     "prettier:check": "prettier -c .",
     "ng": "ng",
     "start": "ng serve",

@@ -4,3 +4,7 @@ node_modules/
 www/
 .sourcemaps/
 *.js
+platforms/
+plugins/
+.firebase/
+.gradle/
