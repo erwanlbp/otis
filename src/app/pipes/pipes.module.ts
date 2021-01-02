@@ -3,15 +3,8 @@ import { TimeElapsedPipe } from './time-elapsed.pipe';
 import { DurationPipe } from './duration.pipe';
 
 @NgModule({
-    imports: [],
-    declarations: [
-        TimeElapsedPipe,
-        DurationPipe,
-    ],
-    exports: [
-        DurationPipe,
-        TimeElapsedPipe,
-    ],
+  imports: [],
+  declarations: [TimeElapsedPipe, DurationPipe],
+  exports: [DurationPipe, TimeElapsedPipe],
 })
-export class PipesModule {
-}
+export class PipesModule {}

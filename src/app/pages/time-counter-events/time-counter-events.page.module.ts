@@ -7,16 +7,18 @@ import { TimeCounterEventsPage } from './time-counter-events.page';
 import { TimeCounterEventComponentModule } from '../../components/time-counter-event/time-counter-event.component.module';
 
 @NgModule({
-    imports: [
-        IonicModule,
-        CommonModule,
-        FormsModule,
-        RouterModule.forChild([
-            { path: ':timeCounterName', component: TimeCounterEventsPage },
-        ]),
-        TimeCounterEventComponentModule,
-    ],
-    declarations: [TimeCounterEventsPage],
+  imports: [
+    IonicModule,
+    CommonModule,
+    FormsModule,
+    RouterModule.forChild([
+      {
+        path: ':timeCounterName',
+        component: TimeCounterEventsPage,
+      },
+    ]),
+    TimeCounterEventComponentModule,
+  ],
+  declarations: [TimeCounterEventsPage],
 })
-export class TimeCounterEventsPageModule {
-}
+export class TimeCounterEventsPageModule {}

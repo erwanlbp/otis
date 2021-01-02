@@ -5,15 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { CounterEventComponent } from './counter-event.component';
 
 @NgModule({
-    imports: [
-        IonicModule,
-        CommonModule,
-        FormsModule,
-    ],
-    exports: [
-        CounterEventComponent
-    ],
-    declarations: [CounterEventComponent]
+  imports: [IonicModule, CommonModule, FormsModule],
+  exports: [CounterEventComponent],
+  declarations: [CounterEventComponent],
 })
-export class CounterEventComponentModule {
-}
+export class CounterEventComponentModule {}

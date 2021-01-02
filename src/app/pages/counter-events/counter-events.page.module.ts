@@ -7,16 +7,18 @@ import { CounterEventsPage } from './counter-events.page';
 import { CounterEventComponentModule } from '../../components/counter-event/counter-event.component.module';
 
 @NgModule({
-    imports: [
-        IonicModule,
-        CommonModule,
-        FormsModule,
-        RouterModule.forChild([
-            {path: ':counterName', component: CounterEventsPage},
-        ]),
-        CounterEventComponentModule,
-    ],
-    declarations: [CounterEventsPage]
+  imports: [
+    IonicModule,
+    CommonModule,
+    FormsModule,
+    RouterModule.forChild([
+      {
+        path: ':counterName',
+        component: CounterEventsPage,
+      },
+    ]),
+    CounterEventComponentModule,
+  ],
+  declarations: [CounterEventsPage],
 })
-export class CounterEventsPageModule {
-}
+export class CounterEventsPageModule {}

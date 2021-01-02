@@ -8,57 +8,52 @@ import { EventType } from '../../interfaces/event-type.type';
 import * as moment from 'moment';
 
 @Component({
-    selector: 'app-counter',
-    templateUrl: './counter.component.html',
-    styleUrls: ['./counter.component.scss'],
+  selector: 'app-counter',
+  templateUrl: './counter.component.html',
+  styleUrls: ['./counter.component.scss'],
 })
 export class CounterComponent implements OnInit {
+  @Input() counter: Counter;
 
-    @Input() counter: Counter;
+  constructor(private eventService: EventService, private loaderService: LoaderService, private popoverController: PopoverController) {}
 
-    constructor(
-        private eventService: EventService,
-        private loaderService: LoaderService,
-        private popoverController: PopoverController,
-    ) {
-    }
+  ngOnInit() {}
 
-    ngOnInit() {
-    }
+  decrement() {
+    this.counter.value--;
+    this.counter.lastEventTs = moment().toDate().getTime();
+    this.loaderService
+      .showLoader('Sauvegarde ...')
+      .then(() => this.saveEvent('decrement'))
+      .catch(err => console.error('failed decrementing counter ::', err))
+      .then(() => this.loaderService.dismissLoader());
+  }
 
-    decrement() {
-        this.counter.value--;
-        this.counter.lastEventTs = moment().toDate().getTime();
-        this.loaderService.showLoader('Sauvegarde ...')
-            .then(() => this.saveEvent('decrement'))
-            .catch(err => console.error('failed decrementing counter ::', err))
-            .then(() => this.loaderService.dismissLoader());
-    }
+  increment() {
+    this.counter.value++;
+    this.counter.lastEventTs = moment().toDate().getTime();
+    this.loaderService
+      .showLoader('Sauvegarde ...')
+      .then(() => this.saveEvent('increment'))
+      .catch(err => console.error('failed incrementing counter ::', err))
+      .then(() => this.loaderService.dismissLoader());
+  }
 
-    increment() {
-        this.counter.value++;
-        this.counter.lastEventTs = moment().toDate().getTime();
-        this.loaderService.showLoader('Sauvegarde ...')
-            .then(() => this.saveEvent('increment'))
-            .catch(err => console.error('failed incrementing counter ::', err))
-            .then(() => this.loaderService.dismissLoader());
-    }
+  private saveEvent(type: EventType): Promise<void> {
+    return this.eventService.saveCounterEventAndSideEffects({
+      timestamp: this.counter.lastEventTs,
+      counterName: this.counter.name,
+      type,
+      newValue: this.counter.value,
+    });
+  }
 
-    private saveEvent(type: EventType): Promise<void> {
-        return this.eventService.saveCounterEventAndSideEffects({
-            timestamp: this.counter.lastEventTs,
-            counterName: this.counter.name,
-            type,
-            newValue: this.counter.value,
-        });
-    }
-
-    async showMoreMenu(event) {
-        const popover = await this.popoverController.create({
-            component: CounterMorePopoverComponent,
-            event,
-            componentProps: { counter: this.counter },
-        });
-        await popover.present();
-    }
+  async showMoreMenu(event) {
+    const popover = await this.popoverController.create({
+      component: CounterMorePopoverComponent,
+      event,
+      componentProps: { counter: this.counter },
+    });
+    await popover.present();
+  }
 }

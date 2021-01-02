@@ -5,14 +5,9 @@ import { CounterIncrementComponent } from './counter-increment.component';
 import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
-    imports: [
-        IonicModule,
-        CommonModule,
-        ReactiveFormsModule,
-    ],
-    exports: [CounterIncrementComponent],
-    declarations: [CounterIncrementComponent],
-    entryComponents: [CounterIncrementComponent],
+  imports: [IonicModule, CommonModule, ReactiveFormsModule],
+  exports: [CounterIncrementComponent],
+  declarations: [CounterIncrementComponent],
+  entryComponents: [CounterIncrementComponent],
 })
-export class CounterIncrementComponentModule {
-}
+export class CounterIncrementComponentModule {}

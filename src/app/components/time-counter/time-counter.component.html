@@ -1,23 +1,23 @@
 <ion-card class="time-counter">
-    <ion-card-header class="no-padding-bottom">
-        <ion-card-subtitle *ngIf="timeCounter">{{ timeCounter.name }}</ion-card-subtitle>
-        <ion-card-subtitle *ngIf="!timeCounter">--</ion-card-subtitle>
-        <ion-button (click)="showMoreMenu($event)" class="time-counter-more-button" color="dark" fill="clear" size="small" type="button">
-            <ion-icon name="more"></ion-icon>
-        </ion-button>
-        <ion-card-subtitle>{{ timeCounter.startTimestamp | timeElapsed | async }}</ion-card-subtitle>
-    </ion-card-header>
-    <ion-card-content>
-        <ion-grid>
-            <ion-row>
-                <ion-col class="ion-align-self-center">
-                    <ion-button (click)="!timeCounter.startTimestamp ? start() : stop()" [disabled]="!timeCounter" size="small">
-                        <ion-icon slot="start" name="stopwatch"></ion-icon>
-                        <span *ngIf="!timeCounter.startTimestamp">Démarrer</span>
-                        <span *ngIf="timeCounter.startTimestamp">Arrêter</span>
-                    </ion-button>
-                </ion-col>
-            </ion-row>
-        </ion-grid>
-    </ion-card-content>
+  <ion-card-header class="no-padding-bottom">
+    <ion-card-subtitle *ngIf="timeCounter">{{ timeCounter.name }}</ion-card-subtitle>
+    <ion-card-subtitle *ngIf="!timeCounter">--</ion-card-subtitle>
+    <ion-button (click)="showMoreMenu($event)" class="time-counter-more-button" color="dark" fill="clear" size="small" type="button">
+      <ion-icon name="more"></ion-icon>
+    </ion-button>
+    <ion-card-subtitle>{{ timeCounter.startTimestamp | timeElapsed | async }}</ion-card-subtitle>
+  </ion-card-header>
+  <ion-card-content>
+    <ion-grid>
+      <ion-row>
+        <ion-col class="ion-align-self-center">
+          <ion-button (click)="!timeCounter.startTimestamp ? start() : stop()" [disabled]="!timeCounter" size="small">
+            <ion-icon slot="start" name="stopwatch"></ion-icon>
+            <span *ngIf="!timeCounter.startTimestamp">Démarrer</span>
+            <span *ngIf="timeCounter.startTimestamp">Arrêter</span>
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card-content>
 </ion-card>

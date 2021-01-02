@@ -6,33 +6,29 @@ import { catchError, map, take } from 'rxjs/operators';
 import { RouteConstants } from '../constants/route.constants';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root',
 })
 export class LoggedInGuard implements CanActivate {
-    constructor(
-        private router: Router,
-        private firebaseAuth: AngularFireAuth,
-    ) {
-    }
+  constructor(private router: Router, private firebaseAuth: AngularFireAuth) {}
 
-    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-        return this.firebaseAuth.authState.pipe(
-            take(1),
-            map(user => {
-                if (!user) {
-                    this.redirect();
-                    return false;
-                }
-                return true;
-            }),
-            catchError(err => {
-                this.redirect();
-                return of(false);
-            })
-        );
-    }
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+    return this.firebaseAuth.authState.pipe(
+      take(1),
+      map(user => {
+        if (!user) {
+          this.redirect();
+          return false;
+        }
+        return true;
+      }),
+      catchError(err => {
+        this.redirect();
+        return of(false);
+      }),
+    );
+  }
 
-    private redirect() {
-        this.router.navigate([RouteConstants.ACCOUNT]);
-    }
+  private redirect() {
+    this.router.navigate([RouteConstants.ACCOUNT]);
+  }
 }

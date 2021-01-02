@@ -1,14 +1,19 @@
 <ion-header>
-    <ion-toolbar>
-        <ion-buttons slot="start">
-            <ion-menu-button *ngIf="!backButton"></ion-menu-button>
-        </ion-buttons>
-        <ion-title>Graphique du compteur {{(counter$|async)?.name}}</ion-title>
-        <ion-back-button #backButton slot="start" defaultHref="/"></ion-back-button>
-    </ion-toolbar>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button *ngIf="!backButton"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Graphique du compteur {{ (counter$ | async)?.name }}</ion-title>
+    <ion-back-button #backButton slot="start" defaultHref="/"></ion-back-button>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content>
-    <app-counter-bar-chart *ngIf="counter$ && counterEventsDayAggregated$" [counter]="counter$" [events]="counterEventsDayAggregated$" aggregateName="jour de la semaine"></app-counter-bar-chart>
-    <app-counter-chart *ngIf="counter$ && counterEvents$" [counter]="counter$" [events]="counterEvents$"></app-counter-chart>
+  <app-counter-bar-chart
+    *ngIf="counter$ && counterEventsDayAggregated$"
+    [counter]="counter$"
+    [events]="counterEventsDayAggregated$"
+    aggregateName="jour de la semaine"
+  ></app-counter-bar-chart>
+  <app-counter-chart *ngIf="counter$ && counterEvents$" [counter]="counter$" [events]="counterEvents$"></app-counter-chart>
 </ion-content>

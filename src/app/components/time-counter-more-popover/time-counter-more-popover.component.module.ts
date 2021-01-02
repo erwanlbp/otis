@@ -4,13 +4,9 @@ import { CommonModule } from '@angular/common';
 import { TimeCounterMorePopoverComponent } from './time-counter-more-popover.component';
 
 @NgModule({
-    imports: [
-        IonicModule,
-        CommonModule,
-    ],
-    exports: [TimeCounterMorePopoverComponent],
-    declarations: [TimeCounterMorePopoverComponent],
-    entryComponents: [TimeCounterMorePopoverComponent],
+  imports: [IonicModule, CommonModule],
+  exports: [TimeCounterMorePopoverComponent],
+  declarations: [TimeCounterMorePopoverComponent],
+  entryComponents: [TimeCounterMorePopoverComponent],
 })
-export class TimeCounterMorePopoverComponentModule {
-}
+export class TimeCounterMorePopoverComponentModule {}

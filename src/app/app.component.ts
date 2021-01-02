@@ -9,49 +9,48 @@ import * as jsonPackage from './../../package.json';
 import * as moment from 'moment';
 
 @Component({
-    selector: 'app-root',
-    templateUrl: 'app.component.html',
-    styleUrls: ['app.component.scss']
+  selector: 'app-root',
+  templateUrl: 'app.component.html',
+  styleUrls: ['app.component.scss'],
 })
 export class AppComponent implements OnInit {
+  connected$: Observable<boolean>;
+  version: string = jsonPackage.version;
 
-    connected$: Observable<boolean>;
-    version: string = jsonPackage.version;
+  pages = [
+    {
+      title: 'Compteurs',
+      url: RouteConstants.HOME,
+      icon: 'home',
+    },
+  ];
 
-    pages = [
-        {
-            title: 'Compteurs',
-            url: RouteConstants.HOME,
-            icon: 'home'
-        },
-    ];
+  constructor(
+    private platform: Platform,
+    private splashScreen: SplashScreen,
+    private statusBar: StatusBar,
+    private authService: AuthService,
+  ) {
+    this.initializeApp();
+  }
 
-    constructor(
-        private platform: Platform,
-        private splashScreen: SplashScreen,
-        private statusBar: StatusBar,
-        private authService: AuthService,
-    ) {
-        this.initializeApp();
-    }
+  initializeApp() {
+    moment.locale('fr-FR');
+    this.platform.ready().then(() => {
+      this.statusBar.styleDefault();
+      this.splashScreen.hide();
+    });
+  }
 
-    initializeApp() {
-        moment.locale('fr-FR');
-        this.platform.ready().then(() => {
-            this.statusBar.styleDefault();
-            this.splashScreen.hide();
-        });
-    }
+  ngOnInit() {
+    this.connected$ = this.authService.isConnected$();
+  }
 
-    ngOnInit() {
-        this.connected$ = this.authService.isConnected$();
-    }
+  logout() {
+    this.authService.logout();
+  }
 
-    logout() {
-        this.authService.logout();
-    }
-
-    login() {
-        this.authService.login();
-    }
+  login() {
+    this.authService.login();
+  }
 }

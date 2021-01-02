@@ -9,16 +9,17 @@ import { AddCounterComponentModule } from '../../components/add-counter-button/a
 import { TimeCounterComponentModule } from '../../components/time-counter/time-counter.component.module';
 
 @NgModule({
-    imports: [
-        IonicModule,
-        CommonModule,
-        FormsModule,
-        RouterModule.forChild([{ path: '', component: HomePage }]),
-        CounterComponentModule,
-        AddCounterComponentModule,
-        TimeCounterComponentModule,
-    ],
-    declarations: [HomePage],
+  imports: [
+    IonicModule,
+    CommonModule,
+    FormsModule,
+    RouterModule.forChild([
+      { path: '', component: HomePage },
+    ]),
+    CounterComponentModule,
+    AddCounterComponentModule,
+    TimeCounterComponentModule,
+  ],
+  declarations: [HomePage],
 })
-export class HomePageModule {
-}
+export class HomePageModule {}

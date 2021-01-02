@@ -1,37 +1,71 @@
 <ion-item-sliding #sliding [disabled]="desktop">
+  <ion-item *ngIf="!editMode">
+    <ion-icon [name]="getIcon()" slot="start"></ion-icon>
+    <ion-label>
+      <span>{{ event.timestamp | date: 'dd/MM/yyyy HH:mm:ss' }}</span>
+      <ion-icon class="ion-margin-horizontal" name="arrow-forward"></ion-icon>
+      <strong>{{ event.newValue }}</strong>
+    </ion-label>
+    <ion-button
+      class="hide-on-small-device"
+      (click)="setEditMode(true)"
+      *ngIf="isLast"
+      color="dark"
+      fill="clear"
+      slot="end"
+      title="Modifier la date et l'heure"
+      type="button"
+    >
+      <ion-icon name="create"></ion-icon>
+    </ion-button>
+    <ion-button
+      class="hide-on-small-device"
+      (click)="delete()"
+      color="dark"
+      fill="clear"
+      slot="end"
+      title="Supprimer l'événement"
+      type="button"
+    >
+      <ion-icon name="trash"></ion-icon>
+    </ion-button>
+  </ion-item>
 
-    <ion-item *ngIf="!editMode">
-        <ion-icon [name]="getIcon()" slot="start"></ion-icon>
-        <ion-label>
-            <span>{{event.timestamp | date:'dd/MM/yyyy HH:mm:ss'}}</span>
-            <ion-icon class="ion-margin-horizontal" name="arrow-forward"></ion-icon>
-            <strong>{{event.newValue}}</strong>
-        </ion-label>
-        <ion-button class="hide-on-small-device" (click)="setEditMode(true)" *ngIf="isLast" color="dark" fill="clear" slot="end" title="Modifier la date et l'heure" type="button">
-            <ion-icon name="create"></ion-icon>
-        </ion-button>
-        <ion-button class="hide-on-small-device" (click)="delete()" color="dark" fill="clear" slot="end" title="Supprimer l'événement" type="button">
-            <ion-icon name="trash"></ion-icon>
-        </ion-button>
-    </ion-item>
+  <ion-item *ngIf="editMode">
+    <ion-icon class="hide-on-small-device" slot="start" [name]="getIcon()"></ion-icon>
+    <ion-label position="floating">Changer la date et/ou l'heure de l'événement</ion-label>
+    <ion-input
+      [(ngModel)]="newStartDateTime"
+      placeholder="{{ event.timestamp | date: 'dd/MM/yyyy HH:mm:ss' }}"
+      style="display: inline-block"
+    ></ion-input>
+    <ion-button
+      (click)="modifyEvent(newStartDateTime)"
+      [disabled]="timestampsAreEquals(newStartDateTime)"
+      class="margin-vertical-auto"
+      color="dark"
+      fill="clear"
+      slot="end"
+      title="Sauvegarder"
+      type="button"
+    >
+      <ion-icon name="checkmark"></ion-icon>
+    </ion-button>
+    <ion-button
+      (click)="setEditMode(false)"
+      class="hide-on-small-device margin-vertical-auto"
+      color="dark"
+      fill="clear"
+      slot="end"
+      title="Annuler"
+      type="button"
+    >
+      <ion-icon name="close"></ion-icon>
+    </ion-button>
+  </ion-item>
 
-    <ion-item *ngIf="editMode">
-        <ion-icon class="hide-on-small-device" slot="start" [name]="getIcon()"></ion-icon>
-        <ion-label position="floating">
-            Changer la date et/ou l'heure de l'événement
-        </ion-label>
-        <ion-input [(ngModel)]="newStartDateTime" placeholder="{{event.timestamp | date:'dd/MM/yyyy HH:mm:ss'}}" style=" display: inline-block"></ion-input>
-        <ion-button (click)="modifyEvent(newStartDateTime)" [disabled]="timestampsAreEquals(newStartDateTime)" class="margin-vertical-auto" color="dark" fill="clear" slot="end" title="Sauvegarder" type="button">
-            <ion-icon name="checkmark"></ion-icon>
-        </ion-button>
-        <ion-button (click)="setEditMode(false)" class="hide-on-small-device margin-vertical-auto" color="dark" fill="clear" slot="end" title="Annuler" type="button">
-            <ion-icon name="close"></ion-icon>
-        </ion-button>
-    </ion-item>
-
-    <ion-item-options>
-        <ion-item-option color="danger" (click)="delete()">Supprimer</ion-item-option>
-        <ion-item-option *ngIf="isLast" (click)="sliding.close(); setEditMode(true)">Modifier</ion-item-option>
-    </ion-item-options>
-
+  <ion-item-options>
+    <ion-item-option color="danger" (click)="delete()">Supprimer</ion-item-option>
+    <ion-item-option *ngIf="isLast" (click)="sliding.close(); setEditMode(true)">Modifier</ion-item-option>
+  </ion-item-options>
 </ion-item-sliding>

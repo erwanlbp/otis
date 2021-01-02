@@ -5,15 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { AddCounterComponent } from './add-counter.component';
 
 @NgModule({
-    imports: [
-        IonicModule,
-        CommonModule,
-        FormsModule,
-    ],
-    exports: [
-        AddCounterComponent,
-    ],
-    declarations: [AddCounterComponent],
+  imports: [IonicModule, CommonModule, FormsModule],
+  exports: [AddCounterComponent],
+  declarations: [AddCounterComponent],
 })
-export class AddCounterComponentModule {
-}
+export class AddCounterComponentModule {}

@@ -6,16 +6,13 @@ import { CounterComponent } from './counter.component';
 import { CounterMorePopoverComponentModule } from '../counter-more-popover/counter-more-popover.component.module';
 
 @NgModule({
-    imports: [
-        IonicModule,
-        CommonModule,
-        FormsModule,
-        CounterMorePopoverComponentModule,
-    ],
-    exports: [
-        CounterComponent
-    ],
-    declarations: [CounterComponent],
+  imports: [
+    IonicModule,
+    CommonModule,
+    FormsModule,
+    CounterMorePopoverComponentModule,
+  ],
+  exports: [CounterComponent],
+  declarations: [CounterComponent],
 })
-export class CounterComponentModule {
-}
+export class CounterComponentModule {}

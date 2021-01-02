@@ -11,71 +11,69 @@ import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
 interface TimeCounterEventWithDate extends TimeCounterEvent {
-    duration: moment.Duration;
+  duration: moment.Duration;
 }
 
 @Component({
-    selector: 'app-time-counter-event',
-    templateUrl: './time-counter-event.component.html',
-    styleUrls: ['./time-counter-event.component.scss'],
+  selector: 'app-time-counter-event',
+  templateUrl: './time-counter-event.component.html',
+  styleUrls: ['./time-counter-event.component.scss'],
 })
 export class TimeCounterEventComponent implements OnInit, OnDestroy {
+  event: TimeCounterEventWithDate;
+  @Input() isLast: boolean = false;
+  desktop: boolean = true;
+  private destroyed$: Subject<void> = new Subject();
 
-    event: TimeCounterEventWithDate;
-    @Input() isLast: boolean = false;
-    desktop: boolean = true;
-    private destroyed$: Subject<void> = new Subject();
+  @Input('event') set timeCounterEvent(ev: TimeCounterEvent) {
+    this.event = {
+      ...ev,
+      duration: ev.startTimestamp && ev.endTimestamp ? moment.duration(ev.endTimestamp - ev.startTimestamp, 'milliseconds') : null,
+    };
+  }
 
-    @Input('event') set timeCounterEvent(ev: TimeCounterEvent) {
-        this.event = {
-            ...ev,
-            duration: ev.startTimestamp && ev.endTimestamp ? moment.duration(ev.endTimestamp - ev.startTimestamp, 'milliseconds') : null,
-        };
+  constructor(
+    private timeCounterEventService: TimeCounterEventService,
+    private utilsService: UtilsService,
+    private popoverController: PopoverController,
+    private timeCounterService: TimeCounterService,
+    private breakpointObserver: BreakpointObserver,
+  ) {}
+
+  ngOnInit() {
+    this.breakpointObserver
+      .observe([Breakpoints.HandsetPortrait])
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(state => (this.desktop = !state.matches));
+  }
+
+  delete() {
+    this.utilsService.askForConfirmation().then(confirmed => {
+      if (!confirmed) {
+        return;
+      }
+      return this.timeCounterEventService.deleteTimeCounterEvent(this.event.timeCounterName, this.event.id);
+    });
+  }
+
+  async edit(event) {
+    if (!this.isLast) {
+      this.utilsService.showToast('Seul le dernier event est modifiable');
+      return;
     }
-
-    constructor(
-        private timeCounterEventService: TimeCounterEventService,
-        private utilsService: UtilsService,
-        private popoverController: PopoverController,
-        private timeCounterService: TimeCounterService,
-        private breakpointObserver: BreakpointObserver,
-    ) {
+    if (await this.timeCounterService.isStarted(this.event.timeCounterName)) {
+      this.utilsService.showToast("L'édition n'est pas possible quand un événement de comptage est en cours");
+      return;
     }
+    const popover = await this.popoverController.create({
+      component: TimeCounterEventEditPopoverComponent,
+      componentProps: { timeCounterEvent: this.event },
+    });
+    await popover.present();
+  }
 
-    ngOnInit() {
-        this.breakpointObserver.observe([Breakpoints.HandsetPortrait])
-            .pipe(takeUntil(this.destroyed$))
-            .subscribe(state => this.desktop = !state.matches);
-    }
-
-    delete() {
-        this.utilsService.askForConfirmation()
-            .then(confirmed => {
-                if (!confirmed) {
-                    return;
-                }
-                return this.timeCounterEventService.deleteTimeCounterEvent(this.event.timeCounterName, this.event.id);
-            });
-    }
-
-    async edit(event) {
-        if (!this.isLast) {
-            this.utilsService.showToast('Seul le dernier event est modifiable');
-            return;
-        }
-        if (await this.timeCounterService.isStarted(this.event.timeCounterName)) {
-            this.utilsService.showToast('L\'édition n\'est pas possible quand un événement de comptage est en cours');
-            return;
-        }
-        const popover = await this.popoverController.create({
-            component: TimeCounterEventEditPopoverComponent,
-            componentProps: { timeCounterEvent: this.event },
-        });
-        await popover.present();
-    }
-
-    ngOnDestroy(): void {
-        this.destroyed$.next();
-        this.destroyed$.unsubscribe();
-    }
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.unsubscribe();
+  }
 }

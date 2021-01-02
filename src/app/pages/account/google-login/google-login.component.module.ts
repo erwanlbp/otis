@@ -5,13 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { GoogleLoginComponent } from './google-login.component';
 
 @NgModule({
-    imports: [
-        IonicModule,
-        CommonModule,
-        FormsModule,
-    ],
-    exports: [GoogleLoginComponent],
-    declarations: [GoogleLoginComponent],
+  imports: [IonicModule, CommonModule, FormsModule],
+  exports: [GoogleLoginComponent],
+  declarations: [GoogleLoginComponent],
 })
-export class GoogleLoginComponentModule {
-}
+export class GoogleLoginComponentModule {}

@@ -8,20 +8,17 @@ import { CounterChartComponentModule } from '../../components/counter-chart/coun
 import { CounterBarChartComponentModule } from 'src/app/components/counter-bar-chart/counter-bar-chart.component.module';
 
 @NgModule({
-    imports: [
-        CommonModule,
-        FormsModule,
-        IonicModule,
-        RouterModule.forChild([
-            { path: ':counterName', component: CounterChartPage },
-        ]),
-        CounterChartComponentModule,
-        CounterBarChartComponentModule,
-    ],
-    providers: [
-        DatePipe,
-    ],
-    declarations: [CounterChartPage]
+  imports: [
+    CommonModule,
+    FormsModule,
+    IonicModule,
+    RouterModule.forChild([
+      { path: ':counterName', component: CounterChartPage },
+    ]),
+    CounterChartComponentModule,
+    CounterBarChartComponentModule,
+  ],
+  providers: [DatePipe],
+  declarations: [CounterChartPage],
 })
-export class CounterChartPageModule {
-}
+export class CounterChartPageModule {}

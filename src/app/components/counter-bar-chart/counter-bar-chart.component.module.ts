@@ -4,12 +4,8 @@ import { CommonModule } from '@angular/common';
 import { CounterBarChartComponent } from './counter-bar-chart.component';
 
 @NgModule({
-    imports: [
-        IonicModule,
-        CommonModule,
-    ],
-    exports: [CounterBarChartComponent],
-    declarations: [CounterBarChartComponent]
+  imports: [IonicModule, CommonModule],
+  exports: [CounterBarChartComponent],
+  declarations: [CounterBarChartComponent],
 })
-export class CounterBarChartComponentModule {
-}
+export class CounterBarChartComponentModule {}

@@ -7,15 +7,16 @@ import { AccountPage } from './account.page';
 import { GoogleLoginComponentModule } from './google-login/google-login.component.module';
 
 @NgModule({
-    imports: [
-        IonicModule,
-        CommonModule,
-        FormsModule,
-        RouterModule.forChild([{path: '', component: AccountPage}]),
-        // GoogleLoginComponentModule,
-        GoogleLoginComponentModule
-    ],
-    declarations: [AccountPage]
+  imports: [
+    IonicModule,
+    CommonModule,
+    FormsModule,
+    RouterModule.forChild([
+      { path: '', component: AccountPage },
+    ]),
+    // GoogleLoginComponentModule,
+    GoogleLoginComponentModule,
+  ],
+  declarations: [AccountPage],
 })
-export class AccountPageModule {
-}
+export class AccountPageModule {}

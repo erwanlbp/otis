@@ -1,32 +1,30 @@
 <ion-content>
-    <ion-list>
+  <ion-list>
+    <ion-list-header>Actions</ion-list-header>
 
-        <ion-list-header>Actions</ion-list-header>
+    <ion-item (click)="startInPast()" *ngIf="!timeCounter.startTimestamp" button>
+      <ion-icon name="clock" slot="start"></ion-icon>
+      Démarrer dans le passé
+    </ion-item>
 
-        <ion-item (click)="startInPast()" *ngIf="!timeCounter.startTimestamp" button>
-            <ion-icon name="clock" slot="start"></ion-icon>
-            Démarrer dans le passé
-        </ion-item>
+    <ion-item (click)="stopInPast()" *ngIf="timeCounter.startTimestamp" button>
+      <ion-icon name="clock" slot="start"></ion-icon>
+      Arrêter dans le passé
+    </ion-item>
 
-        <ion-item (click)="stopInPast()" *ngIf="timeCounter.startTimestamp" button>
-            <ion-icon name="clock" slot="start"></ion-icon>
-            Arrêter dans le passé
-        </ion-item>
+    <ion-item (click)="cancel()" *ngIf="timeCounter.startTimestamp" button>
+      <ion-icon name="close-circle" slot="start"></ion-icon>
+      Annuler l'événement
+    </ion-item>
 
-        <ion-item (click)="cancel()" *ngIf="timeCounter.startTimestamp" button>
-            <ion-icon name="close-circle" slot="start"></ion-icon>
-            Annuler l'événement
-        </ion-item>
+    <ion-item (click)="events()" button>
+      <ion-icon name="medal" slot="start"></ion-icon>
+      Evénements
+    </ion-item>
 
-        <ion-item (click)="events()" button>
-            <ion-icon name="medal" slot="start"></ion-icon>
-            Evénements
-        </ion-item>
-
-        <ion-item (click)="delete()" button>
-            <ion-icon name="trash" slot="start"></ion-icon>
-            Supprimer
-        </ion-item>
-
-    </ion-list>
+    <ion-item (click)="delete()" button>
+      <ion-icon name="trash" slot="start"></ion-icon>
+      Supprimer
+    </ion-item>
+  </ion-list>
 </ion-content>

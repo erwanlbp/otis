@@ -7,17 +7,14 @@ import { PipesModule } from '../../pipes/pipes.module';
 import { TimeCounterEventEditPopoverComponentModule } from '../time-counter-event-edit-popover/time-counter-event-edit-popover.component.module';
 
 @NgModule({
-    imports: [
-        IonicModule,
-        CommonModule,
-        FormsModule,
-        PipesModule,
-        TimeCounterEventEditPopoverComponentModule,
-    ],
-    exports: [
-        TimeCounterEventComponent,
-    ],
-    declarations: [TimeCounterEventComponent],
+  imports: [
+    IonicModule,
+    CommonModule,
+    FormsModule,
+    PipesModule,
+    TimeCounterEventEditPopoverComponentModule,
+  ],
+  exports: [TimeCounterEventComponent],
+  declarations: [TimeCounterEventComponent],
 })
-export class TimeCounterEventComponentModule {
-}
+export class TimeCounterEventComponentModule {}

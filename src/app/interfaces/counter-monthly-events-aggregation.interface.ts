@@ -1,4 +1,4 @@
 export interface CounterMonthlyEventsAggregation {
-    totalCount: number;
-    month: number;
+  totalCount: number;
+  month: number;
 }
