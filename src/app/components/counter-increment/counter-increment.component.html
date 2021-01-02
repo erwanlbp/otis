@@ -1,0 +1,39 @@
+<ion-header class="ion-no-border">
+    <ion-toolbar>
+        <ion-title>Compteur {{counter.name}}</ion-title>
+        <ion-buttons slot="end">
+            <ion-button (click)="close()" slot="icon-only" type="button">
+                <ion-icon name="close"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding-horizontal">
+    <p>De combien voulez vous incrémenter le compteur ?</p>
+    <form (ngSubmit)="submit()" *ngIf="form" [formGroup]="form">
+        <ion-item>
+            <ion-label position="floating">Date/Heure</ion-label>
+            <ion-input formControlName="date"></ion-input>
+        </ion-item>
+
+        <p>Valeur actuelle : {{counter.value}}</p>
+
+        <div class="vertical-center-items">
+            <ion-item>
+                <ion-label position="floating">Incrémenter de ...</ion-label>
+                <ion-input (ionChange)="updateNewValueControl()" formControlName="incrementValue" type="number"></ion-input>
+            </ion-item>
+            <ion-icon size="large" name="swap"></ion-icon>
+            <ion-item>
+                <ion-label position="floating">Nouvelle valeur du compteur</ion-label>
+                <ion-input (ionChange)="updateIncrementValueControl()" formControlName="counterNewValue" type="number"></ion-input>
+            </ion-item>
+        </div>
+
+        <div class="ion-margin-top">
+            <ion-button (click)="close()" type="button">Annuler</ion-button>
+            <ion-button type="submit" [disabled]="!form.valid">Confirmer</ion-button>
+        </div>
+    </form>
+</ion-content>
