@@ -1,0 +1,11 @@
+<ion-grid>
+  <ion-row *ngIf="allCounters">
+    <ion-col>
+      <ng-container *ngFor="let genericCounter of allCounters | async">
+        <app-counter *ngIf="genericCounter.type === 'counter'" [counter]="genericCounter.counter"></app-counter>
+        <app-time-counter *ngIf="genericCounter.type === 'timeCounter'" [timeCounter]="genericCounter.counter"></app-time-counter>
+      </ng-container>
+      <app-add-counter></app-add-counter>
+    </ion-col>
+  </ion-row>
+</ion-grid>
