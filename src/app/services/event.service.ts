@@ -14,20 +14,6 @@ import { UtilsService } from './utils.service';
 export class EventService {
   constructor(private firestore: AngularFirestore, private counterService: CounterService, private utilsService: UtilsService) {}
 
-  private userCounterEventsDocument$(counterName: string): Observable<AngularFirestoreCollection<CounterEvent>> {
-    return this.counterService.userCountersDocument$().pipe(map(doc => doc.doc<Counter>(counterName).collection<CounterEvent>('events')));
-  }
-
-  private saveCounterEvent(event: CounterEvent, eventId?: string): Promise<void> {
-    return this.userCounterEventsDocument$(event.counterName)
-      .pipe(
-        take(1),
-        switchMap(doc => doc.doc(eventId || String(event.timestamp)).set(toCounterEventDto(event))),
-        tap(() => (event.id = eventId || String(event.timestamp))),
-      )
-      .toPromise();
-  }
-
   /**
    * @param eventId is used only for updating, it's the primary key of the event
    */
@@ -101,5 +87,32 @@ export class EventService {
         this.utilsService.showToast('Une erreur est survenue');
         return false;
       });
+  }
+
+  fetchFirstEvent$(name: string): Observable<CounterEvent> {
+    return this.counterService.userCountersDocument$().pipe(
+      switchMap(doc =>
+        doc
+          .doc<Counter>(name)
+          .collection<CounterEvent>('events', ref => ref.orderBy('timestamp', 'asc').limit(1))
+          .snapshotChanges(),
+      ),
+      map(events => (events.length ? events[0] : null)),
+      map(event => toCounterEvent(event.payload.doc.id, event.payload.doc.data(), name)),
+    );
+  }
+
+  private userCounterEventsDocument$(counterName: string): Observable<AngularFirestoreCollection<CounterEvent>> {
+    return this.counterService.userCountersDocument$().pipe(map(doc => doc.doc<Counter>(counterName).collection<CounterEvent>('events')));
+  }
+
+  private saveCounterEvent(event: CounterEvent, eventId?: string): Promise<void> {
+    return this.userCounterEventsDocument$(event.counterName)
+      .pipe(
+        take(1),
+        switchMap(doc => doc.doc(eventId || String(event.timestamp)).set(toCounterEventDto(event))),
+        tap(() => (event.id = eventId || String(event.timestamp))),
+      )
+      .toPromise();
   }
 }

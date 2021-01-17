@@ -5,8 +5,8 @@
   "homepage": "https://ionicframework.com/",
   "scripts": {
     "clean": "rimraf ./dist",
-    "prettier": "prettier --write $(git ls-files -m | xargs)",
-    "prettier:all": "prettier -w .",
+    "prettier:git": "prettier --write $(git ls-files -m | xargs)",
+    "prettier": "prettier -w .",
     "prettier:check": "prettier -c .",
     "ng": "ng",
     "start": "ng serve",
@@ -16,6 +16,11 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run prettier:check"
+    }
   },
   "private": true,
   "dependencies": {

@@ -5,6 +5,7 @@ import { CounterService } from '../../services/counter.service';
 import { Counter } from '../../interfaces/counter';
 import { EventService } from '../../services/event.service';
 import { CounterIncrementComponent } from '../counter-increment/counter-increment.component';
+import { FirstEventComponent } from '../first-event/first-event.component';
 
 @Component({
   selector: 'app-counter-more-popover',
@@ -78,5 +79,11 @@ export class CounterMorePopoverComponent implements OnInit {
         console.error('failed switching counter areAtomicButtonsActive ::', err);
         this.utilsService.showToast('Echec de la sauvegarde');
       });
+  }
+
+  async details(event) {
+    this.close();
+    const modal = await this.popoverController.create({ component: FirstEventComponent, componentProps: { counter: this.counter } });
+    await modal.present();
   }
 }

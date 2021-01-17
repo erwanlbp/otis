@@ -17,6 +17,11 @@
       Graphique
     </ion-item>
 
+    <ion-item (click)="details($event)" button>
+      <ion-icon name="information-circle-outline" slot="start"></ion-icon>
+      Détails
+    </ion-item>
+
     <ion-item (click)="switchAtomicActionsActive()" button>
       <ion-icon name="build" slot="start"></ion-icon>
       {{ counter.areAtomicButtonsActive ? 'Désactiver' : 'Activer' }} les boutons +/-
