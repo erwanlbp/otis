@@ -10,7 +10,7 @@ import { HomePage } from './home.page';
     CommonModule,
     RouterModule.forChild([
       {
-        path: '',
+        path: 'sort',
         component: HomePage,
         children: [
           {
@@ -21,6 +21,11 @@ import { HomePage } from './home.page';
               ).then(m => m.AlphabeticalCountersListModule),
           },
         ],
+      },
+      {
+        path: '',
+        redirectTo: 'sort/alphabetical',
+        pathMatch: 'full',
       },
     ]),
   ],

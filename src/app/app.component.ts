@@ -23,6 +23,16 @@ export class AppComponent implements OnInit {
       url: RouteConstants.HOME,
       icon: 'home',
     },
+    {
+      title: 'Tags',
+      url: RouteConstants.TAG,
+      icon: 'pricetag',
+    },
+    {
+      title: 'Compte',
+      url: RouteConstants.ACCOUNT,
+      icon: 'contact',
+    },
   ];
 
   constructor(

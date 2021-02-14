@@ -16,6 +16,18 @@ const routes: Routes = [
     ],
   },
   {
+    path: 'tags',
+    children: [
+      {
+        path: '',
+        loadChildren: () =>
+          import('./pages/tags/tags.page.module').then(
+            m => m.TagsPageModule,
+          ),
+      },
+    ],
+  },
+  {
     path: 'account',
     children: [
       {

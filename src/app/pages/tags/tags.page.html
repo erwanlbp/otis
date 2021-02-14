@@ -1,0 +1,19 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Tags</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-list>
+    <ion-badge *ngFor="let tag of tags$ | async" [style.background-color]="tag.color" class="ion-margin-end">{{ tag.name }}</ion-badge>
+    <app-add-tag></app-add-tag>
+  </ion-list>
+  <ion-label *ngIf="!((tags$ | async) || []).length" class="no-data">
+    <ion-icon name="search" slot="start"></ion-icon>
+    Vous n'avez pas de tags pour le moment
+  </ion-label>
+</ion-content>

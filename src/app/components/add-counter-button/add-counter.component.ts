@@ -61,10 +61,9 @@ export class AddCounterComponent implements OnInit, OnDestroy {
       this.alertController
         .create({
           header: 'Nouveau compteur',
-          message: 'Remplissez le nom et la valeur de départ',
           inputs: [
             {
-              placeholder: 'Nom',
+              placeholder: 'Nom du compteur',
               type: 'text',
               name: 'name',
             },
