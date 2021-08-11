@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Counter } from '../../interfaces/counter';
 import { EventService } from '../../services/event.service';
 import { LoaderService } from '../../services/loader.service';
@@ -6,18 +6,35 @@ import { PopoverController } from '@ionic/angular';
 import { CounterMorePopoverComponent } from '../counter-more-popover/counter-more-popover.component';
 import { EventType } from '../../interfaces/event-type.type';
 import * as moment from 'moment';
+import { take, takeUntil } from 'rxjs/operators';
+import { UtilsService } from '../../services/utils.service';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-counter',
   templateUrl: './counter.component.html',
   styleUrls: ['./counter.component.scss'],
 })
-export class CounterComponent implements OnInit {
+export class CounterComponent implements OnInit, OnDestroy {
   @Input() counter: Counter;
+  desktop: boolean;
+  private destroyed$: Subject<void> = new Subject();
 
-  constructor(private eventService: EventService, private loaderService: LoaderService, private popoverController: PopoverController) {}
+  constructor(
+    private eventService: EventService,
+    private loaderService: LoaderService,
+    private popoverController: PopoverController,
+    private utilsService: UtilsService,
+    private breakpointObserver: BreakpointObserver,
+  ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.breakpointObserver
+      .observe([Breakpoints.HandsetPortrait])
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(state => (this.desktop = !state.matches));
+  }
 
   decrement() {
     this.counter.value--;
@@ -39,6 +56,29 @@ export class CounterComponent implements OnInit {
       .then(() => this.loaderService.dismissLoader());
   }
 
+  async showMoreMenu(event) {
+    const popover = await this.popoverController.create({
+      component: CounterMorePopoverComponent,
+      event,
+      componentProps: { counter: this.counter },
+    });
+    await popover.present();
+  }
+
+  showLastEventDate(): Promise<void> {
+    return this.eventService
+      .fetchChunkCounterEvents$(this.counter.name, 1)
+      .pipe(take(1))
+      .toPromise()
+      .then(chunk => {
+        if (!chunk || !chunk[0]) {
+          return this.utilsService.showToast(`Aucun évenement trouvé`);
+        }
+        const date: string = moment(chunk[0].timestamp).format('DD/MM/YYYY HH:mm:ss');
+        return this.utilsService.showToast(`Dernier évenement: ${date}`);
+      });
+  }
+
   private saveEvent(type: EventType): Promise<void> {
     return this.eventService.saveCounterEventAndSideEffects({
       timestamp: this.counter.lastEventTs,
@@ -48,12 +88,8 @@ export class CounterComponent implements OnInit {
     });
   }
 
-  async showMoreMenu(event) {
-    const popover = await this.popoverController.create({
-      component: CounterMorePopoverComponent,
-      event,
-      componentProps: { counter: this.counter },
-    });
-    await popover.present();
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.unsubscribe();
   }
 }

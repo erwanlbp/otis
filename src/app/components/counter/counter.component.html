@@ -18,7 +18,11 @@
           </ion-button>
         </ion-col>
 
-        <ion-col class="ion-align-self-center" title="{{ counter.lastEventTs ? (counter.lastEventTs | date: 'short') : null }}">
+        <ion-col
+          (click)="!desktop ? showLastEventDate() : null"
+          class="ion-align-self-center"
+          title="{{ counter.lastEventTs ? (counter.lastEventTs | date: 'short') : null }}"
+        >
           <ion-label *ngIf="counter">{{ counter.value }}</ion-label>
           <ion-label *ngIf="!counter">--</ion-label>
         </ion-col>
