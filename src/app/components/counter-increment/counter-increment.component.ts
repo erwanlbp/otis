@@ -35,6 +35,7 @@ export class CounterIncrementComponent implements OnInit {
       date: this.formBuilder.control(moment().format('DD/MM/YYYY HH:mm:ss'), [Validators.required]),
       counterNewValue: counterNewValueControl,
       incrementValue: incrementValueControl,
+      addAnotherValue: this.formBuilder.control(false),
     });
   }
 
@@ -75,14 +76,24 @@ export class CounterIncrementComponent implements OnInit {
             timestamp: moment(eventDate, 'DD/MM/YYYY HH:mm:ss', true).toDate().getTime(),
             type: eventType,
             value,
-            newValue: this.counter.value + value,
+            newValue: (this.counter.value += value),
           })
-          .then(() => this.close());
+          .then(() => this.finishedSubmitting());
       })
       .catch(err => {
         console.error('failed incrementing/decrementing counter ::', err);
         this.utilsService.showToast('Echec lors de la sauvegarde');
       })
       .then(() => this.loaderService.dismissLoader());
+  }
+
+  private finishedSubmitting(): void {
+    const addAnotherValue: boolean = this.form.get('addAnotherValue').value;
+    if (addAnotherValue) {
+      this.updateNewValueControl();
+      this.form.get('date').setValue(moment().format('DD/MM/YYYY HH:mm:ss'));
+    } else {
+      this.close();
+    }
   }
 }

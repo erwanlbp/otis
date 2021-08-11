@@ -32,6 +32,13 @@
     </div>
 
     <div class="ion-margin-top">
+      <ion-item>
+        <ion-label>Ajouter une autre valeur</ion-label>
+        <ion-checkbox slot="start" formControlName="addAnotherValue"></ion-checkbox>
+      </ion-item>
+    </div>
+
+    <div>
       <ion-button (click)="close()" type="button">Annuler</ion-button>
       <ion-button type="submit" [disabled]="!form.valid">Confirmer</ion-button>
     </div>
