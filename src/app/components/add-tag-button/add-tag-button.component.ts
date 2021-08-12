@@ -85,8 +85,16 @@ export class AddTagButtonComponent implements OnInit {
       this.utilsService.showToast('Le nom est obligatoire');
       return false;
     }
+    if (data.name.length < 1 || data.name.length > 20) {
+      this.utilsService.showToast('Le nom doit faire entre 1 et 20 caractères');
+      return false;
+    }
     if (!data.color) {
       this.utilsService.showToast('La couleur est obligatoire');
+      return false;
+    }
+    if (!new RegExp(/^#[0-9A-Fa-f]{6}$/).test(data.color)) {
+      this.utilsService.showToast('La couleur doit etre en hexadécimal et commencer par un #');
       return false;
     }
     return true;

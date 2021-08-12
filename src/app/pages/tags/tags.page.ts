@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Tag } from '../../interfaces/tag';
 import { TagService } from '../../services/tag.service';
-import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-tags',
@@ -12,7 +11,7 @@ import { AlertController } from '@ionic/angular';
 export class TagsPage implements OnInit {
   tags$: Observable<Tag[]>;
 
-  constructor(private tagService: TagService, private alertController: AlertController) {}
+  constructor(private tagService: TagService) {}
 
   ngOnInit() {
     this.tags$ = this.tagService.fetchTags$();

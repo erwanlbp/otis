@@ -19,5 +19,16 @@ export const func = functions
       .listDocuments()
       .then(docs => Promise.all(docs.map(async doc => await doc.delete())));
 
-    return Promise.all([deleteCounterEvents, deleteCounterMonthlyEvents]).catch(err => console.log(err));
+    const deleteCounterTags = admin
+      .firestore()
+      .collection(`users/${userId}/counters-tags`)
+      .where('counter', '==', counterId)
+      .get()
+      .then(docs => {
+        const promises: Promise<any>[] = [];
+        docs.forEach(doc => promises.push(admin.firestore().doc(`users/${userId}/counters-tags/${doc.id}`).delete()));
+        return Promise.all(promises);
+      });
+
+    return Promise.all([deleteCounterEvents, deleteCounterMonthlyEvents, deleteCounterTags]).catch(err => console.log(err));
   });

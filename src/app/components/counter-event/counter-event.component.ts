@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { UtilsService } from '../../services/utils.service';
 import { CounterEvent } from '../../interfaces/counter-event.interface';
 import { EventService } from '../../services/event.service';
@@ -18,7 +18,7 @@ interface CounterEventWithDate extends CounterEvent {
   templateUrl: './counter-event.component.html',
   styleUrls: ['./counter-event.component.scss'],
 })
-export class CounterEventComponent implements OnInit {
+export class CounterEventComponent implements OnInit, OnDestroy {
   event: CounterEventWithDate;
   editMode = false;
 

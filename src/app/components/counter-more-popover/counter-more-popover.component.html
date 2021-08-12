@@ -22,6 +22,11 @@
       Détails
     </ion-item>
 
+    <ion-item (click)="tagCounter($event)" button>
+      <ion-icon name="pricetags" slot="start"></ion-icon>
+      Tags
+    </ion-item>
+
     <ion-item (click)="switchAtomicActionsActive()" button>
       <ion-icon name="build" slot="start"></ion-icon>
       {{ counter.areAtomicButtonsActive ? 'Désactiver' : 'Activer' }} les boutons +/-
