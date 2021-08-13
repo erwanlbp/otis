@@ -107,4 +107,11 @@ export class TagService {
       )
       .then(() => null);
   }
+
+  deleteTag(tag: Tag): Promise<void> {
+    return this.userTagsDocument$()
+      .pipe(take(1))
+      .toPromise()
+      .then(collection => collection.doc<TagFirebaseDto>(tag.name).delete());
+  }
 }
