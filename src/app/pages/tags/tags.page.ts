@@ -26,7 +26,7 @@ export class TagsPage implements OnInit {
     this.tags$ = this.tagService.fetchTags$();
   }
 
-  deleteTag(tag: Tag, event) {
+  deleteTag(tag: Tag, event: Event) {
     event.stopPropagation();
     this.utilsService
       .askForConfirmation(`Voulez vous supprimer le tag <b>${tag.name}</b> ?<br/><br/>Ceci ne supprimera pas les compteurs associés`)

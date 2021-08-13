@@ -8,6 +8,16 @@ export class CounterTag {
     return new CounterTag(dto.counter, dto.tag);
   }
 
+  static mapByCounter(countersTags: CounterTag[]): Map<string, string[]> {
+    const map = new Map<string, string[]>();
+    countersTags.forEach(counterTag => {
+      const existingValue = map.get(counterTag.counter) || [];
+      existingValue.push(counterTag.tag);
+      map.set(counterTag.counter, existingValue);
+    });
+    return map;
+  }
+
   toFirebaseDto(): CounterTagFirebaseDto | null {
     return {
       counter: this.counter,

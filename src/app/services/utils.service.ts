@@ -16,8 +16,12 @@ export class UtilsService {
     return moment(dateTime, 'DD/MM/YYYY HH:mm:ss').toDate().getTime();
   }
 
+  static containsAny(listA: string[], listB: string[]): boolean {
+    return !!listA.find(elemA => listB.includes(elemA));
+  }
+
   async askForConfirmation(message?: string, header: string = 'Êtes vous sûr ?'): Promise<boolean> {
-    return new Promise((resolve, reject) => {
+    return new Promise<boolean>((resolve, reject) => {
       this.alertController
         .create({
           header,

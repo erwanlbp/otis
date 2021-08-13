@@ -3,12 +3,12 @@ import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AlphabeticalCountersListComponent } from './alphabetical-counters-list.component';
+import { CountersListByTagsComponent } from './counters-list-by-tags.component';
 import { CounterComponentModule } from '../counter/counter.component.module';
 import { AddCounterComponentModule } from '../add-counter-button/add-counter.component.module';
 import { TimeCounterComponentModule } from '../time-counter/time-counter.component.module';
-import { AddTagButtonComponentModule } from '../add-tag-button/add-tag-button.component.module';
 import { TagsListComponentModule } from '../tags-list/tags-list.component.module';
+import { AddTagButtonComponentModule } from '../add-tag-button/add-tag-button.component.module';
 
 @NgModule({
   imports: [
@@ -18,7 +18,7 @@ import { TagsListComponentModule } from '../tags-list/tags-list.component.module
     RouterModule.forChild([
       {
         path: '',
-        component: AlphabeticalCountersListComponent,
+        component: CountersListByTagsComponent,
       },
     ]),
     CounterComponentModule,
@@ -27,6 +27,6 @@ import { TagsListComponentModule } from '../tags-list/tags-list.component.module
     AddTagButtonComponentModule,
     TagsListComponentModule,
   ],
-  declarations: [AlphabeticalCountersListComponent],
+  declarations: [CountersListByTagsComponent],
 })
-export class AlphabeticalCountersListModule {}
+export class CountersListByTagsModule {}

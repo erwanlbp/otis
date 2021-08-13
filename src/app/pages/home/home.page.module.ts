@@ -20,6 +20,13 @@ import { HomePage } from './home.page';
                 '../../components/alphabetical-counters-list/alphabetical-counters-list.module'
               ).then(m => m.AlphabeticalCountersListModule),
           },
+          {
+            path: 'tags',
+            loadChildren: () =>
+              import(
+                '../../components/counters-list-by-tags/counters-list-by-tags.module'
+              ).then(m => m.CountersListByTagsModule),
+          },
         ],
       },
       {
