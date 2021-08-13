@@ -26,8 +26,7 @@ export class TagsPage implements OnInit {
     this.tags$ = this.tagService.fetchTags$();
   }
 
-  deleteTag(tag: Tag, event: Event) {
-    event.stopPropagation();
+  deleteTag(tag: Tag) {
     this.utilsService
       .askForConfirmation(`Voulez vous supprimer le tag <b>${tag.name}</b> ?<br/><br/>Ceci ne supprimera pas les compteurs associés`)
       .then(confirmed => {
@@ -45,8 +44,8 @@ export class TagsPage implements OnInit {
       });
   }
 
-  async editTag(tag: Tag, event) {
-    const modal = await this.popoverController.create({ component: ColorSelectorComponent, event });
+  async editTag(tag: Tag) {
+    const modal = await this.popoverController.create({ component: ColorSelectorComponent });
     await modal.present();
     const { data, role } = await modal.onDidDismiss();
     if (role !== 'selected') {

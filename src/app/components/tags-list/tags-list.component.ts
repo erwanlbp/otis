@@ -18,6 +18,7 @@ export class TagsListComponent implements OnInit, OnDestroy {
   @Input() grayWhenNoSelected: boolean = false;
   @Input() withClearButton: boolean = false;
   @Input() withIcons: boolean = false;
+  @Input() withAddButton: boolean = false;
 
   @Output() tagsSelected: EventEmitter<string[]> = new EventEmitter<string[]>();
   @Output() clickedOnTag: EventEmitter<TagSelected> = new EventEmitter<TagSelected>();

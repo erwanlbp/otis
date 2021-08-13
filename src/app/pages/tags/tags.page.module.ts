@@ -3,8 +3,8 @@ import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TagsPage } from './tags.page';
-import { AddTagButtonComponentModule } from '../../components/add-tag-button/add-tag-button.component.module';
 import { ColorSelectorComponentModule } from '../../components/color-selector/color-selector.component.module';
+import { TagsListComponentModule } from '../../components/tags-list/tags-list.component.module';
 
 @NgModule({
   imports: [
@@ -13,8 +13,8 @@ import { ColorSelectorComponentModule } from '../../components/color-selector/co
     RouterModule.forChild([
       { path: '', component: TagsPage },
     ]),
-    AddTagButtonComponentModule,
     ColorSelectorComponentModule,
+    TagsListComponentModule,
   ],
   declarations: [TagsPage],
 })

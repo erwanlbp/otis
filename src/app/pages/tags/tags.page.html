@@ -8,15 +8,16 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <ion-list class="vertical-center-items">
-    <ion-chip *ngFor="let tag of tags$ | async" [style.background-color]="tag.color" (click)="editTag(tag, $event)">
-      <ion-label>{{ tag.name }}</ion-label>
-      <ion-icon name="close-circle" color="white" (click)="deleteTag(tag, $event)"></ion-icon>
-    </ion-chip>
+  <app-tags-list
+    (clickedOnRemoveButton)="deleteTag($event)"
+    (clickedOnTag)="editTag($event.tag)"
+    [grayWhenNoSelected]="false"
+    [withAddButton]="true"
+    [withClearButton]="false"
+    [withIcons]="true"
+  ></app-tags-list>
 
-    <app-add-tag></app-add-tag>
-  </ion-list>
-  <ion-label *ngIf="!((tags$ | async) || []).length" class="no-data">
+  <ion-label *ngIf="!((tags$ | async) || []).length" class="no-data ion-margin">
     <ion-icon name="search" slot="start"></ion-icon>
     Vous n'avez pas de tags pour le moment
   </ion-label>
