@@ -9,6 +9,8 @@ import { AuthService } from './auth.service';
   providedIn: 'root',
 })
 export class CounterService {
+  private allCounters$: Observable<Counter[]>;
+
   constructor(private firestore: AngularFirestore, private authService: AuthService) {}
 
   userCountersDocument$(): Observable<AngularFirestoreCollection<CounterFirebaseDto>> {
@@ -23,15 +25,18 @@ export class CounterService {
   }
 
   fetchCounters$(): Observable<Counter[]> {
-    return this.userCountersDocument$().pipe(
-      switchMap(doc => {
-        if (!doc) {
-          return of([] as CounterFirebaseDto[]);
-        }
-        return doc.valueChanges();
-      }),
-      map(counters => counters.map(counter => toCounter(counter))),
-    );
+    if (!this.allCounters$) {
+      this.allCounters$ = this.userCountersDocument$().pipe(
+        switchMap(doc => {
+          if (!doc) {
+            return of([] as CounterFirebaseDto[]);
+          }
+          return doc.valueChanges();
+        }),
+        map(counters => counters.map(counter => toCounter(counter))),
+      );
+    }
+    return this.allCounters$;
   }
 
   saveCounter(counter: Counter): Promise<void> {
@@ -66,9 +71,6 @@ export class CounterService {
   }
 
   fetchCounter$(name: string): Observable<Counter> {
-    return this.userCountersDocument$().pipe(
-      switchMap(doc => doc.doc<CounterFirebaseDto>(name).valueChanges()),
-      map(counter => toCounter(counter)),
-    );
+    return this.fetchCounters$().pipe(map(counters => counters.find(counter => counter.name === name)));
   }
 }

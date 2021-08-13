@@ -11,6 +11,8 @@ import { TimeCounterEvent } from '../interfaces/time-counter-event.interface';
   providedIn: 'root',
 })
 export class TimeCounterService {
+  private allCounters$: Observable<TimeCounter[]>;
+
   constructor(
     private firestore: AngularFirestore,
     private authService: AuthService,
@@ -29,14 +31,17 @@ export class TimeCounterService {
   }
 
   fetchTimeCounters$(): Observable<TimeCounter[]> {
-    return this.userTimeCountersDocument$().pipe(
-      switchMap(doc => {
-        if (!doc) {
-          return of([]);
-        }
-        return doc.valueChanges();
-      }),
-    );
+    if (!this.allCounters$) {
+      this.allCounters$ = this.userTimeCountersDocument$().pipe(
+        switchMap(doc => {
+          if (!doc) {
+            return of([]);
+          }
+          return doc.valueChanges();
+        }),
+      );
+    }
+    return this.allCounters$;
   }
 
   saveTimeCounter(counter: TimeCounter): Promise<void> {
@@ -65,7 +70,7 @@ export class TimeCounterService {
   }
 
   fetchTimeCounter$(name: string): Observable<TimeCounter> {
-    return this.userTimeCountersDocument$().pipe(switchMap(doc => doc.doc<TimeCounter>(name).valueChanges()));
+    return this.fetchTimeCounters$().pipe(map(counters => counters.find(counter => counter.name === name)));
   }
 
   startCounter(name: string, startDate?: number): Promise<void> {
