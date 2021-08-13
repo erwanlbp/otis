@@ -52,11 +52,6 @@ export class AddTagButtonComponent implements OnInit {
           type: 'text',
           name: 'name',
         },
-        {
-          placeholder: 'Couleur (#123ABC)',
-          type: 'text',
-          name: 'color',
-        },
       ],
       buttons: [
         {
@@ -76,25 +71,17 @@ export class AddTagButtonComponent implements OnInit {
       if (role !== 'validate') {
         return;
       }
-      return new Tag(data.values.name, data.values.color);
+      return new Tag(data.values.name, Tag.DEFAULT_COLOR);
     });
   }
 
-  private isValid(data: { name: string; color: string }): boolean {
+  private isValid(data: { name: string }): boolean {
     if (!data.name) {
       this.utilsService.showToast('Le nom est obligatoire');
       return false;
     }
     if (data.name.length < 1 || data.name.length > 20) {
       this.utilsService.showToast('Le nom doit faire entre 1 et 20 caractères');
-      return false;
-    }
-    if (!data.color) {
-      this.utilsService.showToast('La couleur est obligatoire');
-      return false;
-    }
-    if (!new RegExp(/^#[0-9A-Fa-f]{6}$/).test(data.color)) {
-      this.utilsService.showToast('La couleur doit etre en hexadécimal et commencer par un #');
       return false;
     }
     return true;

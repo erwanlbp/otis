@@ -1,0 +1,5 @@
+<ion-list>
+  <ion-chip *ngFor="let color of getColors()" [style.background-color]="color" (click)="selected(color)">
+    <ion-label>{{ color }}</ion-label>
+  </ion-chip>
+</ion-list>

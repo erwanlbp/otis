@@ -9,9 +9,9 @@
 
 <ion-content class="ion-padding">
   <ion-list class="vertical-center-items">
-    <ion-chip *ngFor="let tag of tags$ | async" [style.background-color]="tag.color">
+    <ion-chip *ngFor="let tag of tags$ | async" [style.background-color]="tag.color" (click)="editTag(tag, $event)">
       <ion-label>{{ tag.name }}</ion-label>
-      <ion-icon name="close-circle" color="white" (click)="deleteTag(tag)"></ion-icon>
+      <ion-icon name="close-circle" color="white" (click)="deleteTag(tag, $event)"></ion-icon>
     </ion-chip>
 
     <app-add-tag></app-add-tag>

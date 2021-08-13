@@ -1,4 +1,6 @@
 export class Tag {
+  static DEFAULT_COLOR: string = '#777777';
+
   constructor(public name: string, public color: string) {}
 
   static from(tagDto: TagFirebaseDto): Tag | null {
