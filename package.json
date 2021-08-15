@@ -50,15 +50,15 @@
     "zone.js": "~0.9.1"
   },
   "devDependencies": {
-    "@angular-devkit/architect": "~0.801.2",
+    "@angular-devkit/architect": "~0.1200.5",
     "@angular-devkit/build-angular": "^0.803.23",
     "@angular-devkit/core": "~8.1.2",
-    "@angular-devkit/schematics": "~8.1.2",
+    "@angular-devkit/schematics": "~12.2.1",
     "@angular/cli": "~8.1.2",
     "@angular/compiler": "~8.2.14",
     "@angular/compiler-cli": "~8.2.14",
     "@angular/language-service": "~8.2.14",
-    "@ionic/angular-toolkit": "^2.1.1",
+    "@ionic/angular-toolkit": "^4.0.0",
     "@types/moment-duration-format": "^2.2.2",
     "@types/node": "~8.9.4",
     "codelyzer": "^5.0.0",
