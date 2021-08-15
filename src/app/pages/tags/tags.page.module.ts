@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { TagsPage } from './tags.page';
 import { ColorSelectorComponentModule } from '../../components/color-selector/color-selector.component.module';
 import { TagsListComponentModule } from '../../components/tags-list/tags-list.component.module';
+import { AddTagButtonComponentModule } from '../../components/add-tag-button/add-tag-button.component.module';
 
 @NgModule({
   imports: [
@@ -15,6 +16,7 @@ import { TagsListComponentModule } from '../../components/tags-list/tags-list.co
     ]),
     ColorSelectorComponentModule,
     TagsListComponentModule,
+    AddTagButtonComponentModule,
   ],
   declarations: [TagsPage],
 })

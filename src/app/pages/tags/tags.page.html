@@ -4,6 +4,9 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-title>Tags</ion-title>
+    <ion-buttons slot="end">
+      <app-add-tag *ngIf="!((tags$ | async) || []).length"></app-add-tag>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
