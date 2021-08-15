@@ -23,7 +23,7 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/cdk": "^8.2.3",
+    "@angular/cdk": "^9.2.4",
     "@angular/common": "^9.1.13",
     "@angular/core": "^9.1.13",
     "@angular/fire": "^5.2.3",
