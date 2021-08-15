@@ -31,7 +31,7 @@ export class AppComponent implements OnInit {
     {
       title: 'Compte',
       url: RouteConstants.ACCOUNT,
-      icon: 'person-circle-outline',
+      icon: 'person-circle',
     },
   ];
 

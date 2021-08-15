@@ -3,7 +3,7 @@
     <ion-card-subtitle *ngIf="timeCounter">{{ timeCounter.name }}</ion-card-subtitle>
     <ion-card-subtitle *ngIf="!timeCounter">--</ion-card-subtitle>
     <ion-button (click)="showMoreMenu($event)" class="time-counter-more-button" color="dark" fill="clear" size="small" type="button">
-      <ion-icon name="ellipsis-vertical-outline"></ion-icon>
+      <ion-icon name="ellipsis-vertical"></ion-icon>
     </ion-button>
     <ion-card-subtitle>{{ timeCounter.startTimestamp | timeElapsed | async }}</ion-card-subtitle>
   </ion-card-header>
