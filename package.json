@@ -41,7 +41,7 @@
     "cordova-plugin-googleplus": "^8.2.1",
     "core-js": "^3.16.1",
     "firebase": "^7.7.0",
-    "highcharts": "^8.0.0",
+    "highcharts": "^9.0.0",
     "moment": "^2.29.4",
     "moment-duration-format": "^2.3.2",
     "rxjs": "~6.6.7",
