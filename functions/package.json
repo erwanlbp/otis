@@ -4,12 +4,12 @@
     "clean": "rimraf ./lib",
     "lint": "tslint --project tsconfig.json",
     "build": "npm run clean && tsc",
-    "serve": "npm run build && firebase serve --only functions",
-    "emulator": "npm run build && firebase emulators:start --only functions,firestore --inspect-functions 9229",
-    "shell": "npm run build && firebase functions:shell",
+    "serve": "npm run build && npx firebase-tools serve --only functions",
+    "emulator": "npm run build && npx firebase-tools emulators:start --only functions,firestore --inspect-functions 9229",
+    "shell": "npm run build && npx firebase-tools functions:shell",
     "start": "npm run shell",
-    "deploy": "npm run build && firebase deploy --only functions",
-    "logs": "firebase functions:log"
+    "deploy": "npm run build && npx firebase-tools deploy --only functions",
+    "logs": "npx firebase-tools functions:log"
   },
   "engines": {
     "node": "12"

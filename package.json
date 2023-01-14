@@ -10,8 +10,8 @@
     "prettier:check": "prettier -c .",
     "ng": "ng",
     "start": "ng serve",
-    "build": "npm run clean && ./node_modules/ionic/bin/ionic build",
-    "build:prod": "npm run clean && ./node_modules/ionic/bin/ionic build --prod --release --engine browser ",
+    "build": "npm run clean && npx ionic build",
+    "build:prod": "npm run clean && npx ionic build --prod --release --engine browser ",
     "deploy": "npm run build:prod && npm prune --production && firebase deploy --only hosting && npm ci",
     "test": "ng test",
     "e2e": "ng e2e"
