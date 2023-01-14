@@ -3,6 +3,7 @@
 
 name: Deploy to Firebase Functions on merge
 'on':
+  workflow_dispatch:
   push:
     branches:
       - master
