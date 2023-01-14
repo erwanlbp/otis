@@ -40,6 +40,6 @@ ionic cordova run android --livereload --debug --device --consolelogs
 
 ## Deploy web app
 
-```bash
-ionic build && firebase deploy
-```
+The deploy is done by Github Action CD when PR is merged on master.
+
+If the label `deploy_preview` is set on a PR, a preview will be deployed by Github Action to test before deploying to live website, that will output a URL like : <https://otis-count--pr33-elbp-add-cd-2slnz7xz.web.app/>
