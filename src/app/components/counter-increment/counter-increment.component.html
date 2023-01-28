@@ -17,11 +17,11 @@
       <ion-input formControlName="date"></ion-input>
     </ion-item>
 
-    <ion-chip (click)="removeTime(10 * 60)">-10m</ion-chip>
-    <ion-chip (click)="removeTime(30 * 60)">-30m</ion-chip>
-    <ion-chip (click)="removeTime(2 * 60 * 60)">-2h</ion-chip>
-    <ion-chip (click)="removeTime(6 * 60 * 60)">-6h</ion-chip>
-    <ion-chip (click)="removeTime(24 * 60 * 60)">-1j</ion-chip>
+    <ion-chip (click)="removeTime(10 * 60)">10m</ion-chip>
+    <ion-chip (click)="removeTime(30 * 60)">30m</ion-chip>
+    <ion-chip (click)="removeTime(2 * 60 * 60)">2h</ion-chip>
+    <ion-chip (click)="removeTime(6 * 60 * 60)">6h</ion-chip>
+    <ion-chip (click)="removeTime(24 * 60 * 60)">1j</ion-chip>
     <ion-chip (click)="resetTime()"><ion-icon class="ion-no-margin" name="refresh-outline"></ion-icon></ion-chip>
 
     <p>Valeur actuelle : {{ (counter$ | async).value }}</p>
