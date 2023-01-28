@@ -7,6 +7,9 @@ import { EventService } from '../../services/event.service';
 import { EventType, getEventType } from '../../interfaces/event-type.type';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LoaderService } from '../../services/loader.service';
+import { Observable, Subject } from 'rxjs';
+import { filter, startWith, takeUntil } from 'rxjs/operators';
+import { CounterService } from 'src/app/services/counter.service';
 
 @Component({
   selector: 'app-counter-increment',
@@ -14,8 +17,9 @@ import { LoaderService } from '../../services/loader.service';
   styleUrls: ['./counter-increment.component.scss'],
 })
 export class CounterIncrementComponent implements OnInit {
-  counter: Counter;
+  counter$: Observable<Counter>;
   form: FormGroup;
+  private destroyed$: Subject<void> = new Subject();
 
   constructor(
     private navParams: NavParams,
@@ -24,36 +28,40 @@ export class CounterIncrementComponent implements OnInit {
     private eventService: EventService,
     private formBuilder: FormBuilder,
     private loaderService: LoaderService,
+    private counterService: CounterService,
   ) {}
 
   ngOnInit() {
-    this.counter = this.navParams.get('counter');
+    const counter = this.navParams.get('counter');
+    this.counter$ = this.counterService.fetchCounter$(counter.name).pipe(startWith(counter));
 
-    const counterNewValueControl = this.formBuilder.control(this.counter.value + 1, [Validators.required]);
-    const incrementValueControl = this.formBuilder.control(1, [Validators.required]);
     this.form = this.formBuilder.group({
       date: this.formBuilder.control(moment().format('DD/MM/YYYY HH:mm:ss'), [Validators.required]),
-      counterNewValue: counterNewValueControl,
-      incrementValue: incrementValueControl,
+      counterNewValue: this.formBuilder.control(1, [Validators.required]),
+      incrementValue: this.formBuilder.control(1, [Validators.required]),
       addAnotherValue: this.formBuilder.control(false),
+    });
+
+    this.counter$.pipe(takeUntil(this.destroyed$)).subscribe(counter => {
+      this.form.get('counterNewValue').patchValue(counter.value + this.form.get('incrementValue').value);
     });
   }
 
-  updateIncrementValueControl() {
+  updateIncrementValueControl(counter: Counter) {
     const newValue: number = this.form.get('counterNewValue').value;
-    this.form.get('incrementValue').setValue(newValue - this.counter.value);
+    this.form.get('incrementValue').setValue(newValue - counter.value);
   }
 
-  updateNewValueControl() {
+  updateNewValueControl(counter: Counter) {
     const incrementValue: number = this.form.get('incrementValue').value;
-    this.form.get('counterNewValue').setValue(this.counter.value + incrementValue);
+    this.form.get('counterNewValue').setValue(counter.value + incrementValue);
   }
 
   close() {
     this.modalController.dismiss();
   }
 
-  submit() {
+  submit(counter: Counter) {
     const value: number = this.form.get('incrementValue').value;
     if (!value || value === 0) {
       this.utilsService.showToast("Incrémenter de 0 n'est pas autorisé");
@@ -63,7 +71,7 @@ export class CounterIncrementComponent implements OnInit {
     const eventDate: string = this.form.get('date').value;
     return this.loaderService
       .showLoader('Validation de la date ...')
-      .then(() => this.eventService.assertValidEventDate(this.counter.name, eventDate))
+      .then(() => this.eventService.assertValidEventDate(counter.name, eventDate))
       .then(async valid => {
         if (!valid) {
           console.error('event date is not valid, nothing to do');
@@ -72,11 +80,11 @@ export class CounterIncrementComponent implements OnInit {
         await this.loaderService.showLoader('Sauvegarde ...');
         return this.eventService
           .saveCounterEventAndSideEffects({
-            counterName: this.counter.name,
+            counterName: counter.name,
             timestamp: moment(eventDate, 'DD/MM/YYYY HH:mm:ss', true).toDate().getTime(),
             type: eventType,
             value,
-            newValue: (this.counter.value += value),
+            newValue: counter.value + value,
           })
           .then(() => this.finishedSubmitting());
       })
@@ -90,10 +98,15 @@ export class CounterIncrementComponent implements OnInit {
   private finishedSubmitting(): void {
     const addAnotherValue: boolean = this.form.get('addAnotherValue').value;
     if (addAnotherValue) {
-      this.updateNewValueControl();
+      // this.updateNewValueControl();
       this.form.get('date').setValue(moment().format('DD/MM/YYYY HH:mm:ss'));
     } else {
       this.close();
     }
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.unsubscribe();
   }
 }

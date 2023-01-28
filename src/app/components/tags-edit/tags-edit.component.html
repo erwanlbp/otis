@@ -1,6 +1,6 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
-    <ion-title>Compteur {{ counter.name }}</ion-title>
+    <ion-title *ngIf="counter$ | async as counter">Compteur {{ counter.name }}</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="close()" slot="icon-only" type="button">
         <ion-icon name="close"></ion-icon>
@@ -9,12 +9,16 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding-horizontal">
+<ion-content class="ion-padding-horizontal" *ngIf="counter$ | async as counter">
   <p>Sélectionner les tags à apposer au compteur:</p>
 
   <ion-list *ngIf="tags$">
     <ion-item *ngFor="let tag of tags$ | async">
-      <ion-checkbox (ionChange)="tagChecked(tag, $event.detail.checked)" [checked]="tag.selectedOnCounter" slot="start"></ion-checkbox>
+      <ion-checkbox
+        (ionChange)="tagChecked(counter, tag, $event.detail.checked)"
+        [checked]="tag.selectedOnCounter"
+        slot="start"
+      ></ion-checkbox>
       <ion-label [color]="tag.color">{{ tag.name }}</ion-label>
     </ion-item>
   </ion-list>

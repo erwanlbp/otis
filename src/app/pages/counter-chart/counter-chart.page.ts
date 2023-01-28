@@ -35,9 +35,7 @@ export class CounterChartPage implements OnInit {
     this.counterEventsDayAggregated$ = counterNameParam$.pipe(
       switchMap(counterName => this.eventService.fetchAllCounterEvents$(counterName)),
       map(events => _.countBy(events, (event: CounterEvent) => moment(event.timestamp).format('dddd'))),
-      tap(x => console.log(x)),
       map(counts => Object.keys(counts).map(key => ({ label: key, value: counts[key] }))),
-      tap(x => console.log(x)),
     );
     this.counter$ = counterNameParam$.pipe(switchMap(counterName => this.counterService.fetchCounter$(counterName)));
   }
