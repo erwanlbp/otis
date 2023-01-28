@@ -57,6 +57,15 @@ export class CounterIncrementComponent implements OnInit {
     this.form.get('counterNewValue').setValue(counter.value + incrementValue);
   }
 
+  removeTime(seconds: number) {
+    let date = moment(this.form.get('date').value, 'DD/MM/YYYY HH:mm:ss', true).subtract(seconds, 'second');
+    this.form.get('date').patchValue(date.format('DD/MM/YYYY HH:mm:ss'));
+  }
+
+  resetTime() {
+    this.form.get('date').patchValue(moment().format('DD/MM/YYYY HH:mm:ss'));
+  }
+
   close() {
     this.modalController.dismiss();
   }
