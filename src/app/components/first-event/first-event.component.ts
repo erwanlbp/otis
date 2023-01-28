@@ -3,7 +3,7 @@ import { Counter } from '../../interfaces/counter';
 import { NavParams } from '@ionic/angular';
 import { EventService } from '../../services/event.service';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-first-event',
@@ -16,7 +16,10 @@ export class FirstEventComponent implements OnInit {
   constructor(private eventService: EventService, private navParams: NavParams) {}
 
   ngOnInit() {
-    const counter: Counter = this.navParams.get('counter');
-    this.firstEvent$ = this.eventService.fetchFirstEvent$(counter.name).pipe(map(event => event.timestamp));
+    const counter$: Observable<Counter> = this.navParams.get('counter');
+    this.firstEvent$ = counter$.pipe(
+      switchMap(counter => this.eventService.fetchFirstEvent$(counter.name)),
+      map(event => event.timestamp),
+    );
   }
 }

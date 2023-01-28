@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChange, SimpleChanges } from '@angular/core';
 import { Counter } from '../../interfaces/counter';
 import { EventService } from '../../services/event.service';
 import { LoaderService } from '../../services/loader.service';
@@ -9,7 +9,7 @@ import * as moment from 'moment';
 import { take, takeUntil } from 'rxjs/operators';
 import { UtilsService } from '../../services/utils.service';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-counter',

@@ -7,32 +7,32 @@
       Incrémenter / Décrémenter
     </ion-item>
 
-    <ion-item (click)="events()" button>
+    <ion-item (click)="events(counter)" button>
       <ion-icon name="medal" slot="start"></ion-icon>
       Evénements
     </ion-item>
 
-    <ion-item (click)="chart()" button>
+    <ion-item (click)="chart(counter)" button>
       <ion-icon name="analytics" slot="start"></ion-icon>
       Graphique
     </ion-item>
 
-    <ion-item (click)="details($event)" button>
+    <ion-item (click)="details()" button>
       <ion-icon name="information-circle-outline" slot="start"></ion-icon>
       Détails
     </ion-item>
 
-    <ion-item (click)="tagCounter($event)" button>
+    <ion-item (click)="tagCounter()" button>
       <ion-icon name="pricetags" slot="start"></ion-icon>
       Tags
     </ion-item>
 
-    <ion-item (click)="switchAtomicActionsActive()" button>
+    <ion-item (click)="switchAtomicActionsActive(counter)" button>
       <ion-icon name="build" slot="start"></ion-icon>
       {{ counter.areAtomicButtonsActive ? 'Désactiver' : 'Activer' }} les boutons +/-
     </ion-item>
 
-    <ion-item (click)="delete()" button>
+    <ion-item (click)="delete(counter)" button>
       <ion-icon name="trash" slot="start"></ion-icon>
       Supprimer
     </ion-item>

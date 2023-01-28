@@ -24,7 +24,7 @@ export class GoogleLoginComponent implements OnInit {
     this.authService
       .login()
       .catch(err => {
-        console.log(err);
+        console.error(err);
         this.utilsService.showToast('Echec de la connexion Google');
       })
       .then(credentials => {

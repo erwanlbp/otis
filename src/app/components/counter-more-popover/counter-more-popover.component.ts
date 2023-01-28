@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertController, ModalController, NavController, NavParams, PopoverController } from '@ionic/angular';
+import { ModalController, NavController, NavParams, PopoverController } from '@ionic/angular';
 import { UtilsService } from '../../services/utils.service';
 import { CounterService } from '../../services/counter.service';
 import { Counter } from '../../interfaces/counter';
-import { EventService } from '../../services/event.service';
 import { CounterIncrementComponent } from '../counter-increment/counter-increment.component';
 import { FirstEventComponent } from '../first-event/first-event.component';
 import { TagsEditComponent } from '../tags-edit/tags-edit.component';
@@ -23,8 +22,6 @@ export class CounterMorePopoverComponent implements OnInit {
     private navController: NavController,
     private utilsService: UtilsService,
     private counterService: CounterService,
-    private alertController: AlertController,
-    private eventService: EventService,
   ) {}
 
   ngOnInit() {
@@ -35,21 +32,21 @@ export class CounterMorePopoverComponent implements OnInit {
     return this.popoverController.dismiss();
   }
 
-  async delete() {
+  async delete(counter: Counter) {
     this.close();
     const confirmed = await this.utilsService.askForConfirmation();
     if (!confirmed) {
       return;
     }
-    await this.counterService.deleteCounter(this.counter);
+    await this.counterService.deleteCounter(counter);
   }
 
-  events() {
-    this.navController.navigateForward(`/counter-events/${this.counter.name}`).then(() => this.close());
+  events(counter: Counter) {
+    this.navController.navigateForward(`/counter-events/${counter.name}`).then(() => this.close());
   }
 
-  chart() {
-    this.navController.navigateForward(`/counter-chart/${this.counter.name}`).then(() => this.close());
+  chart(counter: Counter) {
+    this.navController.navigateForward(`/counter-chart/${counter.name}`).then(() => this.close());
   }
 
   async addMoreThanOne() {
@@ -58,37 +55,32 @@ export class CounterMorePopoverComponent implements OnInit {
     await modal.present();
   }
 
-  async switchAtomicActionsActive() {
+  async switchAtomicActionsActive(counter: Counter) {
     this.close();
     const confirmed = await this.utilsService.askForConfirmation(
-      `Ceci ${this.counter.areAtomicButtonsActive ? 'désactivera' : 'activera'} les boutons +/- de ce compteur sur la liste des compteurs`,
+      `Ceci ${counter.areAtomicButtonsActive ? 'désactivera' : 'activera'} les boutons +/- de ce compteur sur la liste des compteurs`,
       null,
     );
     if (!confirmed) {
       return;
     }
     const tempCounter: Counter = {
-      ...this.counter,
-      areAtomicButtonsActive: !this.counter.areAtomicButtonsActive,
+      ...counter,
+      areAtomicButtonsActive: !counter.areAtomicButtonsActive,
     };
-    this.counterService
-      .saveCounter(tempCounter)
-      .then(() => {
-        this.counter.areAtomicButtonsActive = tempCounter.areAtomicButtonsActive;
-      })
-      .catch(err => {
-        console.error('failed switching counter areAtomicButtonsActive ::', err);
-        this.utilsService.showToast('Echec de la sauvegarde');
-      });
+    this.counterService.saveCounter(tempCounter).catch(err => {
+      console.error('failed switching counter areAtomicButtonsActive ::', err);
+      this.utilsService.showToast('Echec de la sauvegarde');
+    });
   }
 
-  async details(event) {
+  async details() {
     this.close();
     const modal = await this.popoverController.create({ component: FirstEventComponent, componentProps: { counter: this.counter } });
     await modal.present();
   }
 
-  async tagCounter(event) {
+  async tagCounter() {
     this.close();
     const modal = await this.modalController.create({ component: TagsEditComponent, componentProps: { counter: this.counter } });
     await modal.present();

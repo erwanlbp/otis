@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Counter, CounterFirebaseDto, toCounter, toCounterDto } from '../interfaces/counter';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
-import { map, switchMap, take } from 'rxjs/operators';
+import { filter, map, switchMap, take } from 'rxjs/operators';
 import { AuthService } from './auth.service';
 
 @Injectable({
@@ -71,6 +71,9 @@ export class CounterService {
   }
 
   fetchCounter$(name: string): Observable<Counter> {
-    return this.fetchCounters$().pipe(map(counters => counters.find(counter => counter.name === name)));
+    return this.fetchCounters$().pipe(
+      map(counters => counters.find(counter => counter.name === name)),
+      filter(x => !!x),
+    );
   }
 }
